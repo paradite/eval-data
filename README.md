@@ -1,8 +1,8 @@
-# 16x Eval
+# Eval data
 
-16x Eval is an evaluation framework for LLMs and prompts on real world coding tasks in a variety of languages and frameworks. Initially the framework targets coding tasks in JavaScript, Python and SQL.
+Evaluation data for LLMs and prompts on real world coding tasks in a variety of languages and frameworks. Initially the framework targets coding tasks in JavaScript, Python and SQL.
 
-16x Eval is built by [16x Prompt](https://prompt.16x.engineer/).
+Built by [16x Prompt](https://prompt.16x.engineer/).
 
 ## Projects
 
