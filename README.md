@@ -20,4 +20,6 @@ Built by [16x Prompt](https://prompt.16x.engineer/).
 
 ## Eval
 
-TODO
+I have decided to build a separate tool to evaluate models and prompts.
+
+See [16x Eval website](https://eval.16x.engineer/) for more information.
