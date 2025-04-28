@@ -2,7 +2,7 @@
 
 Evaluation data for LLMs and prompts on real world coding tasks in a variety of languages and frameworks. Initially the framework targets coding tasks in JavaScript, Python and SQL.
 
-Built by [16x Prompt](https://prompt.16x.engineer/).
+Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.16x.engineer/). 
 
 ## Projects
 
