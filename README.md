@@ -4,7 +4,7 @@ Evaluation data for LLMs and prompts on real world coding tasks and writing task
 
 Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.16x.engineer/). 
 
-## Projects
+## Coding Projects
 
 ### Next.js
 
@@ -18,11 +18,13 @@ Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.
 
 [python-script](/projects/python-script/) - Python script code snippets.
 
-### Visualization
+### Benchmark Visualization
 
-[visualization](/projects/visualization/) - Visualization project.
+[visualization](/projects/visualization/) - Coding a visualization of benchmark results.
 
-### Writing - AI Timeline
+## Writing Projects
+
+### AI Timeline
 
 [ai-timeline](/projects/ai-timeline/) - Writing an AI Timeline.
 
