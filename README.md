@@ -18,7 +18,11 @@ Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.
 
 [python-script](/projects/python-script/) - Python script code snippets.
 
-## Eval
+### Visualization
+
+[visualization](/projects/visualization/) - Visualization project.
+
+## Local eval tool
 
 I have decided to build a separate tool to evaluate models and prompts.
 
