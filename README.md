@@ -28,8 +28,12 @@ Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.
 
 [ai-timeline](/projects/ai-timeline/) - Writing an AI Timeline.
 
-## Local eval tool
+## Model Evaluation Results
 
-I have decided to build a separate tool to evaluate models and prompts.
+[model-eval-results](/model-eval-results/) - Raw results exported from [16x Eval](https://eval.16x.engineer/) for models evaluations.
+
+## 16x Eval
+
+I am building a local desktop app to evaluate models and prompts.
 
 See [16x Eval website](https://eval.16x.engineer/) for more information.
