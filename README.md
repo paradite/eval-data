@@ -22,6 +22,10 @@ Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.
 
 [visualization](/projects/visualization/) - Coding a visualization of benchmark results.
 
+### TypeScript Narrowing
+
+[typescript-narrowing](/projects/typescript-narrowing/) - Coding TypeScript narrowing tests.
+
 ## Writing Projects
 
 ### AI Timeline
