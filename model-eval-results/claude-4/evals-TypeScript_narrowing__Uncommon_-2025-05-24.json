@@ -1,0 +1,501 @@
+{
+  "evals": [
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "claude-3-5-sonnet-20241022",
+      "provider": "anthropic",
+      "rating": 8,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "To fix the TypeScript error, we need to properly narrow down the type using discriminated unions. Here's the corrected version:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  if (model.name === \"gpt-4\") {\n    return (model as ModelInput).inputTokenLimit;\n  }\n  if (model.name === \"gpt-3.5-turbo\") {\n    return (model as ModelOutput).outputTokenLimit;\n  }\n}\n```\n\nThe issue in the original code was that the `switch` statement wasn't properly narrowing the type. By using `if` statements and type predicates, TypeScript can correctly infer the type in each branch.\n\nHere's an alternative solution using type predicates for even better type safety:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction isModelInput(model: Model): model is ModelInput {\n  return model.name === \"gpt-4\";\n}\n\nfunction isModelOutput(model: Model): model is ModelOutput {\n  return model.name === \"gpt-3.5-turbo\";\n}\n\nfunction getModelInfo(model: Model) {\n  if (isModelInput(model)) {\n    return model.inputTokenLimit;\n  }\n  if (isModelOutput(model)) {\n    return model.outputTokenLimit;\n  }\n}\n```\n\nBoth solutions will work, but the second one with type predicates is generally considered better practice as it provides better type safety and reusability.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 289,
+        "completionTokens": 507,
+        "totalTokens": 796
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 6981,
+      "id": "4d48391f-f17c-4591-9f42-76bb292249ab",
+      "createdAt": "2025-05-13T10:42:14.344Z",
+      "notes": "second and final answer works",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "claude-3-7-sonnet-20250219",
+      "provider": "anthropic",
+      "rating": 1,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "I'll fix the TypeScript error by using proper type narrowing without type assertions or type guards. The issue is that TypeScript doesn't automatically narrow the union type based on the string literal check in the switch statement.\n\nHere's the fixed code:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  if (model.name === \"gpt-4\") {\n    // TypeScript now knows model is ModelInput\n    return model.inputTokenLimit;\n  } else if (model.name === \"gpt-3.5-turbo\") {\n    // TypeScript now knows model is ModelOutput\n    return model.outputTokenLimit;\n  }\n}\n```\n\nThe key change is replacing the switch statement with if/else if statements. TypeScript's control flow analysis works better with if statements for narrowing union types based on discriminated unions (where a property like 'name' acts as a discriminator).\n\nWith this approach, TypeScript correctly narrows the type in each conditional block, allowing access to the specific properties without errors.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 296,
+        "completionTokens": 316,
+        "totalTokens": 612
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 5369,
+      "id": "1557864f-1d25-478d-b11d-ea6397310e4a",
+      "createdAt": "2025-05-13T10:56:17.885Z",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "claude-3-5-sonnet-20241022",
+      "provider": "anthropic",
+      "rating": 1,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "To fix the TypeScript error using type narrowing (without type assertions or type guards), we can use literal type narrowing in the switch statement. Here's the corrected version:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\": {\n      const inputModel = model as ModelInput;\n      return inputModel.inputTokenLimit;\n    }\n    case \"gpt-3.5-turbo\": {\n      const outputModel = model as ModelOutput;\n      return outputModel.outputTokenLimit;\n    }\n  }\n}\n```\n\nThe key changes made are:\n\n1. Added block scopes using curly braces for each case\n2. Created new variables to hold the narrowed type\n3. TypeScript automatically narrows the type based on the literal string comparison in the switch statement\n\nThis approach leverages TypeScript's control flow analysis to properly narrow the types within each case block.\n\nI apologize, but I notice you specifically asked not to use type assertions, and my solution still includes them. Unfortunately, without using type assertions or type guards, it's challenging to achieve this particular type narrowing in TypeScript. The fundamental issue is that TypeScript's control flow analysis with discriminated unions works best with type guards or type assertions.\n\nWould you like to see alternative approaches that might involve restructuring the types or using different patterns altogether?",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 296,
+        "completionTokens": 397,
+        "totalTokens": 693
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 7213,
+      "id": "1c0d86c5-699d-4feb-aeed-60cc7901dddb",
+      "createdAt": "2025-05-13T10:56:19.728Z",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "gpt-4.1",
+      "provider": "openai",
+      "rating": 1,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "The error occurs because TypeScript cannot guarantee that `model` is not of type `ModelOther` (which only has `name: string`) in the `switch` cases, since `ModelOther`'s `name` property could be any string, including `\"gpt-4\"` or `\"gpt-3.5-turbo\"`.\n\n**Type guards** (like `if (\"inputTokenLimit\" in model)`) or **type assertions** (like `model as ModelInput`) would solve this, but you requested not to use them.\n\nHowever, you can use **exhaustive checks** and return `undefined` (or some default) for the `ModelOther` case, which narrows the type enough for TypeScript to be happy, because the only way for `model.name` to be `\"gpt-4\"` is if it's a `ModelInput`, and `\"gpt-3.5-turbo\"` is if it's a `ModelOutput`.\n\nHere's how you can do it:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Here, model is narrowed to ModelInput\n      return (model as ModelInput).inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Here, model is narrowed to ModelOutput\n      return (model as ModelOutput).outputTokenLimit;\n    default:\n      // ModelOther or any other string\n      return undefined;\n  }\n}\n```\n\nBut **this uses type assertions**, which you said not to use.\n\n### Solution: Use object literal types for ModelOther\n\nThe real issue is that `ModelOther`'s `name` property is `string`, which overlaps with the other types. If you change `ModelOther` to:\n\n```ts\ntype ModelOther = {\n  name: Exclude<string, \"gpt-4\" | \"gpt-3.5-turbo\">;\n};\n```\n\nNow, TypeScript knows that if `model.name` is `\"gpt-4\"`, it cannot be `ModelOther`. This allows proper narrowing **without type guards or assertions**:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: Exclude<string, \"gpt-4\" | \"gpt-3.5-turbo\">;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      return model.outputTokenLimit;\n  }\n}\n```\n\n**No type guards, no type assertions, and the error is fixed!**\n\n---\n\n### Summary\n\n- The error is due to `ModelOther`'s `name: string` overlapping with the other types.\n- By making `ModelOther`'s `name` **exclude** the other string literals, TypeScript can properly narrow the type in the `switch`.\n- No type guards or assertions are needed.\n\n---\n\n**Final code:**\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: Exclude<string, \"gpt-4\" | \"gpt-3.5-turbo\">;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      return model.outputTokenLimit;\n  }\n}\n```\nThis will type-check correctly and does not use type guards or type assertions.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 250,
+        "completionTokens": 921,
+        "totalTokens": 1171
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 9852,
+      "id": "521519a3-9af6-4d78-8996-d150f8377f83",
+      "createdAt": "2025-05-13T10:56:22.368Z",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "o3",
+      "provider": "openai",
+      "rating": 1,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "`ModelOther`’s `name` property is currently just `string`, which still allows the\nliterals `\"gpt-4\"` and `\"gpt-3.5-turbo\"`.  \nBecause of that overlap the compiler cannot\nuse `name` as a discriminator and therefore refuses to narrow\n`model` inside the `switch`.\n\nGive `ModelOther.name` any string **except** those two literal values and the\nunion becomes a proper discriminated union; the existing `switch`\nthen narrows correctly without any type guards or assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\n/*  Any string that is NOT one of the recognised literal names  */\ntype OtherModelName = Exclude<string, \"gpt-4\" | \"gpt-3.5-turbo\">;\n\ntype ModelOther = {\n  name: OtherModelName;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      return model.inputTokenLimit;       // OK\n    case \"gpt-3.5-turbo\":\n      return model.outputTokenLimit;      // OK\n    default:\n      return undefined;                   // covers ModelOther\n  }\n}\n\n/* inferred return type: number | undefined */\n```\n\nBy excluding the two literal names from `OtherModelName`, `model.name`\nbecomes a reliable discriminator, letting TypeScript narrow the union\nautomatically inside the `switch` without any extra type-checking code.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 249,
+        "completionTokens": 1084,
+        "totalTokens": 1333
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 16819,
+      "id": "8ff174ff-df9a-4bf1-b640-84abb7c804c5",
+      "createdAt": "2025-05-13T11:04:00.011Z",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "deepseek-chat",
+      "provider": "deepseek",
+      "rating": 1,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "To fix the TypeScript error without using type assertions or type guards, you can use discriminated unions properly. The issue is that TypeScript isn't properly narrowing the type based on the `name` property. Here's the corrected version:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Now properly narrowed to ModelInput\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Now properly narrowed to ModelOutput\n      return model.outputTokenLimit;\n    default:\n      // Handle ModelOther case\n      return undefined;\n  }\n}\n```\n\nThe key changes are:\n1. The `name` properties in `ModelInput` and `ModelOutput` are now literal types (`\"gpt-4\"` and `\"gpt-3.5-turbo\"` respectively)\n2. The switch statement properly narrows the type based on these literal values\n3. Added a default case to handle `ModelOther`\n\nThis works because TypeScript can use the literal string values in the `name` property to discriminate between the different union types. When you check `model.name === \"gpt-4\"`, TypeScript knows that the only possible type is `ModelInput`, and similarly for `\"gpt-3.5-turbo\"` and `ModelOutput`.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 248,
+        "completionTokens": 360,
+        "totalTokens": 608
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 20041,
+      "id": "6239d2e9-68a3-4cd7-a824-0d3ba4c48b8a",
+      "createdAt": "2025-05-13T11:04:03.234Z",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "o4-mini",
+      "provider": "openai",
+      "rating": 1,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "You actually have a perfectly good discriminant on `name`, you just have to make sure that your “other” branch can’t accidentally overlap the two literal names you care about.  As soon as you write\n\n```ts\ntype ModelOther = {\n  // make sure this cannot ever be “gpt-4” or “gpt-3.5-turbo”\n  name: Exclude<string, ModelInput[\"name\"] | ModelOutput[\"name\"]>;\n};\n```\n\nthen TypeScript will see\n\n1.  If `model.name === \"gpt-4\"` ⇒ only `ModelInput` survives  \n2.  If `model.name === \"gpt-3.5-turbo\"` ⇒ only `ModelOutput` survives  \n3.  Otherwise ⇒ only `ModelOther` survives  \n\nand you can do:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  // now *cannot* overlap \"gpt-4\" or \"gpt-3.5-turbo\"  \n  name: Exclude<string, ModelInput[\"name\"] | ModelOutput[\"name\"]>;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // here model is narrowed to ModelInput\n      return model.inputTokenLimit;\n\n    case \"gpt-3.5-turbo\":\n      // here model is narrowed to ModelOutput\n      return model.outputTokenLimit;\n\n    default:\n      // here model is ModelOther\n      return undefined;\n  }\n}\n```\n\nNo type‐assertions, no manual type guards, just a proper discriminated union.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 249,
+        "completionTokens": 2010,
+        "totalTokens": 2259
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 20380,
+      "id": "d2240efb-2b0e-4385-bfe5-a3067f808709",
+      "createdAt": "2025-05-13T11:04:03.573Z",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "gemini-2.5-pro-exp-03-25",
+      "provider": "google",
+      "rating": 1,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "To fix the TypeScript error using proper type narrowing without type assertions or type guards, we need to ensure that the `name` property can effectively discriminate between the members of the `Model` union.\n\nThe issue arises because `ModelOther` has `name: string`. When `model.name` is, for example, `\"gpt-4\"`, TypeScript narrows the type of `model` to `ModelInput | ModelOther` (specifically, `ModelOther` where `name` is `\"gpt-4\"`). Since `ModelOther` (even when its `name` is `\"gpt-4\"`) doesn't guarantee the existence of `inputTokenLimit`, the access `model.inputTokenLimit` is unsafe and results in an error.\n\nTo make `name` a true discriminant, we need to refine `ModelOther` such that its `name` property cannot be one of the literal names used by `ModelInput` or `ModelOutput`. We can achieve this using the `Exclude` utility type.\n\nHere's the corrected code:\n\n```typescript\n// Define the specific names used by ModelInput and ModelOutput\ntype SpecificModelNames = \"gpt-4\" | \"gpt-3.5-turbo\";\n\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\n// Refine ModelOther so its 'name' cannot be one of the SpecificModelNames\ntype ModelOther = {\n  name: Exclude<string, SpecificModelNames>;\n  // If ModelOther could have other properties, they would be listed here, e.g.:\n  // someOtherProperty?: boolean;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model): number | undefined { // Added explicit return type for clarity\n  switch (model.name) {\n    case \"gpt-4\":\n      // After refining ModelOther, if model.name is \"gpt-4\",\n      // TypeScript knows 'model' must be ModelInput.\n      // ModelOther is excluded because ModelOther['name'] cannot be \"gpt-4\".\n      // ModelOutput is excluded because ModelOutput['name'] is \"gpt-3.5-turbo\".\n      return model.inputTokenLimit; // No error\n    case \"gpt-3.5-turbo\":\n      // Similarly, if model.name is \"gpt-3.5-turbo\",\n      // TypeScript knows 'model' must be ModelOutput.\n      return model.outputTokenLimit; // No error\n    // No default case is strictly necessary to fix the errors,\n    // the function will implicitly return undefined if 'model.name'\n    // doesn't match any case (i.e., if 'model' is ModelOther).\n    // A default case could be added for more explicit handling:\n    // default:\n    //   // Here, 'model' is narrowed to ModelOther\n    //   // const otherModel: ModelOther = model;\n    //   // console.log(`Unknown model name: ${otherModel.name}`);\n    //   return undefined; // Or throw an error\n  }\n  // Implicit return undefined if no case matches\n  return undefined;\n}\n\n// Example Usage:\nconst gpt4Model: Model = { name: \"gpt-4\", inputTokenLimit: 8000 };\nconst gpt3Model: Model = { name: \"gpt-3.5-turbo\", outputTokenLimit: 4000 };\nconst otherModel: Model = { name: \"some-other-model\" };\n// const invalidOtherModel: Model = { name: \"gpt-4\" }; // This would now be a type error for ModelOther\n\nconsole.log(getModelInfo(gpt4Model)); // Expected: 8000\nconsole.log(getModelInfo(gpt3Model)); // Expected: 4000\nconsole.log(getModelInfo(otherModel)); // Expected: undefined\n```\n\n**Explanation of the fix:**\n\n1.  **`SpecificModelNames`**: We create a helper type for the literal names `\"gpt-4\"` and `\"gpt-3.5-turbo\"`.\n2.  **Refined `ModelOther`**: We change `ModelOther`'s `name` property from `string` to `Exclude<string, SpecificModelNames>`. This means `ModelOther['name']` can be any string *except* `\"gpt-4\"` or `\"gpt-3.5-turbo\"`.\n3.  **Improved Narrowing**:\n    *   In the `case \"gpt-4\":` block, TypeScript knows `model.name` is `\"gpt-4\"`.\n        *   `ModelInput` matches.\n        *   `ModelOutput` is eliminated because its `name` is `\"gpt-3.5-turbo\"`.\n        *   `ModelOther` is eliminated because its `name` (now `Exclude<string, \"gpt-4\" | \"gpt-3.5-turbo\">`) cannot be `\"gpt-4\"`.\n        *   Therefore, `model` is correctly narrowed to `ModelInput`, and `model.inputTokenLimit` can be accessed safely.\n    *   A similar process applies to the `case \"gpt-3.5-turbo\":` block, narrowing `model` to `ModelOutput`.\n4.  **Return Type**: The function `getModelInfo` can return a `number` (from `inputTokenLimit` or `outputTokenLimit`) or `undefined` (if `model` is `ModelOther` and its name doesn't match any case, or if no case matches). I've added an explicit return type `number | undefined` for clarity, and an explicit `return undefined` at the end of the function to satisfy strict checks if all code paths don't return a value.\n\nThis approach modifies the type definitions to make them suitable for discriminated union narrowing based on the `name` property, which is a standard way to resolve such issues when type assertions and explicit type guards are disallowed.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 273,
+        "completionTokens": 1334,
+        "totalTokens": 1607
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 123584,
+      "id": "5974de59-d78d-469e-b1c0-974d2b845937",
+      "createdAt": "2025-05-13T11:05:46.777Z",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "gemini-2.5-pro-preview-05-06",
+      "provider": "google",
+      "rating": 1,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "To fix the TypeScript error using proper type narrowing without type assertions or type guards, we need to ensure that the `name` property can effectively discriminate between the members of the `Model` union.\n\nThe issue arises because `ModelOther` has `name: string`. When `model.name` is, for example, `\"gpt-4\"`, TypeScript narrows the type of `model` to `ModelInput | ModelOther` (specifically, `ModelOther` where `name` is `\"gpt-4\"`). Since `ModelOther` (even when its `name` is `\"gpt-4\"`) doesn't guarantee the existence of `inputTokenLimit`, the access `model.inputTokenLimit` is unsafe and results in an error.\n\nTo make `name` a true discriminant, we need to refine `ModelOther` such that its `name` property cannot be one of the literal names used by `ModelInput` or `ModelOutput`. We can achieve this using the `Exclude` utility type.\n\nHere's the corrected code:\n\n```typescript\n// Define the specific names used by ModelInput and ModelOutput\ntype SpecificModelNames = \"gpt-4\" | \"gpt-3.5-turbo\";\n\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\n// Refine ModelOther so its 'name' cannot be one of the SpecificModelNames\ntype ModelOther = {\n  name: Exclude<string, SpecificModelNames>;\n  // If ModelOther could have other properties, they would be listed here, e.g.:\n  // someOtherProperty?: boolean;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model): number | undefined { // Added explicit return type for clarity\n  switch (model.name) {\n    case \"gpt-4\":\n      // After refining ModelOther, if model.name is \"gpt-4\",\n      // TypeScript knows 'model' must be ModelInput.\n      // ModelOther is excluded because ModelOther['name'] cannot be \"gpt-4\".\n      // ModelOutput is excluded because ModelOutput['name'] is \"gpt-3.5-turbo\".\n      return model.inputTokenLimit; // No error\n    case \"gpt-3.5-turbo\":\n      // Similarly, if model.name is \"gpt-3.5-turbo\",\n      // TypeScript knows 'model' must be ModelOutput.\n      return model.outputTokenLimit; // No error\n    // No default case is strictly necessary to fix the errors,\n    // the function will implicitly return undefined if 'model.name'\n    // doesn't match any case (i.e., if 'model' is ModelOther).\n    // A default case could be added for more explicit handling:\n    // default:\n    //   // Here, 'model' is narrowed to ModelOther\n    //   // const otherModel: ModelOther = model;\n    //   // console.log(`Unknown model name: ${otherModel.name}`);\n    //   return undefined; // Or throw an error\n  }\n  // Implicit return undefined if no case matches\n  return undefined;\n}\n\n// Example Usage:\nconst gpt4Model: Model = { name: \"gpt-4\", inputTokenLimit: 8000 };\nconst gpt3Model: Model = { name: \"gpt-3.5-turbo\", outputTokenLimit: 4000 };\nconst otherModel: Model = { name: \"some-other-model\" };\n// const invalidOtherModel: Model = { name: \"gpt-4\" }; // This would now be a type error for ModelOther\n\nconsole.log(getModelInfo(gpt4Model)); // Expected: 8000\nconsole.log(getModelInfo(gpt3Model)); // Expected: 4000\nconsole.log(getModelInfo(otherModel)); // Expected: undefined\n```\n\n**Explanation of the fix:**\n\n1.  **`SpecificModelNames`**: We create a helper type for the literal names `\"gpt-4\"` and `\"gpt-3.5-turbo\"`.\n2.  **Refined `ModelOther`**: We change `ModelOther`'s `name` property from `string` to `Exclude<string, SpecificModelNames>`. This means `ModelOther['name']` can be any string *except* `\"gpt-4\"` or `\"gpt-3.5-turbo\"`.\n3.  **Improved Narrowing**:\n    *   In the `case \"gpt-4\":` block, TypeScript knows `model.name` is `\"gpt-4\"`.\n        *   `ModelInput` matches.\n        *   `ModelOutput` is eliminated because its `name` is `\"gpt-3.5-turbo\"`.\n        *   `ModelOther` is eliminated because its `name` (now `Exclude<string, \"gpt-4\" | \"gpt-3.5-turbo\">`) cannot be `\"gpt-4\"`.\n        *   Therefore, `model` is correctly narrowed to `ModelInput`, and `model.inputTokenLimit` can be accessed safely.\n    *   A similar process applies to the `case \"gpt-3.5-turbo\":` block, narrowing `model` to `ModelOutput`.\n4.  **Return Type**: The function `getModelInfo` can return a `number` (from `inputTokenLimit` or `outputTokenLimit`) or `undefined` (if `model` is `ModelOther` and its name doesn't match any case, or if no case matches). I've added an explicit return type `number | undefined` for clarity, and an explicit `return undefined` at the end of the function to satisfy strict checks if all code paths don't return a value.\n\nThis approach modifies the type definitions to make them suitable for discriminated union narrowing based on the `name` property, which is a standard way to resolve such issues when type assertions and explicit type guards are disallowed.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 273,
+        "completionTokens": 1334,
+        "totalTokens": 1607
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing.\n\nDo not use type assertions. Do not use type guards.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 123844,
+      "id": "66b9f1fd-1f64-4914-863a-0d8e54678d32",
+      "createdAt": "2025-05-13T11:05:47.037Z",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "gpt-4.1",
+      "provider": "openai",
+      "rating": 6,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "The error occurs because TypeScript only knows that `model` is of type `ModelInput | ModelOther` (for `\"gpt-4\"`) or `ModelOutput | ModelOther` (for `\"gpt-3.5-turbo\"`), since both `ModelInput` and `ModelOther` can have `name: \"gpt-4\"`, and both `ModelOutput` and `ModelOther` can have `name: \"gpt-3.5-turbo\"`.  \nBut only `ModelInput` actually has `inputTokenLimit`, and only `ModelOutput` has `outputTokenLimit`.\n\nTo fix this, you need to **narrow** the type further by checking for the presence of the property before accessing it.\n\nHere’s how you can do it **without type assertions**:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      if ('inputTokenLimit' in model) {\n        return model.inputTokenLimit;\n      }\n      break;\n    case \"gpt-3.5-turbo\":\n      if ('outputTokenLimit' in model) {\n        return model.outputTokenLimit;\n      }\n      break;\n  }\n}\n```\n\n**Explanation:**\n\n- The `'inputTokenLimit' in model` check narrows the type to `ModelInput` inside the block.\n- The `'outputTokenLimit' in model` check narrows the type to `ModelOutput` inside the block.\n- No type assertions are used.\n\nThis is the idiomatic way to handle this in TypeScript.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 244,
+        "completionTokens": 401,
+        "totalTokens": 645
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 4145,
+      "id": "10e203b1-21fb-4fab-b9a6-d3888866e019",
+      "createdAt": "2025-05-13T11:23:49.849Z",
+      "notes": "use in keyword",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "claude-3-7-sonnet-20250219",
+      "provider": "anthropic",
+      "rating": 7,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "I'll fix the TypeScript error by properly narrowing the types in the switch statement. The issue is that TypeScript isn't automatically narrowing the union type correctly based on the `name` property.\n\nHere's the fixed code with proper type narrowing:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Now TypeScript knows model is ModelInput\n      return (model as ModelInput).inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Now TypeScript knows model is ModelOutput\n      return (model as ModelOutput).outputTokenLimit;\n  }\n}\n```\n\nWait, I see that you specifically asked not to use type assertions. Let me fix it properly with type guards:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction isModelInput(model: Model): model is ModelInput {\n  return model.name === \"gpt-4\";\n}\n\nfunction isModelOutput(model: Model): model is ModelOutput {\n  return model.name === \"gpt-3.5-turbo\";\n}\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      if (isModelInput(model)) {\n        return model.inputTokenLimit;\n      }\n      break;\n    case \"gpt-3.5-turbo\":\n      if (isModelOutput(model)) {\n        return model.outputTokenLimit;\n      }\n      break;\n  }\n}\n```\n\nActually, since the discriminant property (`name`) is already being used in the switch statement, we can simplify this further:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  if (model.name === \"gpt-4\") {\n    return model.inputTokenLimit; // TypeScript correctly narrows to ModelInput\n  } else if (model.name === \"gpt-3.5-turbo\") {\n    return model.outputTokenLimit; // TypeScript correctly narrows to ModelOutput\n  }\n}\n```\n\nThis solution uses proper type narrowing without type assertions, and TypeScript will correctly infer the type in each branch.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 289,
+        "completionTokens": 757,
+        "totalTokens": 1046
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 10196,
+      "id": "f746b2e3-94a0-4731-b84d-de3de8bd2cf1",
+      "createdAt": "2025-05-13T11:23:55.899Z",
+      "notes": "second answer works\nfinal answer wrong",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "o3",
+      "provider": "openai",
+      "rating": 1,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "`model.name` is supposed to be the discriminating field, but in the\n`ModelOther` branch it was typed as the *full* `string` type.  \nThat means TypeScript cannot rule out the possibility that\n`model.name` is `\"gpt-4\"` or `\"gpt-3.5-turbo\"` while the object is still\na `ModelOther`, so the switch-case does not narrow correctly.\n\nGive `ModelOther.name` any string *except* the two literal names that are\nused as discriminants and the switch will work as intended.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  // cannot be \"gpt-4\" or \"gpt-3.5-turbo\"\n  name: Exclude<string, \"gpt-4\" | \"gpt-3.5-turbo\">;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      return model.inputTokenLimit;      // OK\n    case \"gpt-3.5-turbo\":\n      return model.outputTokenLimit;     // OK\n  }\n}\n```\n\nNo type assertions are needed—the union is now properly discriminated, so\neach `case` branch narrows to the correct subtype.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 243,
+        "completionTokens": 1304,
+        "totalTokens": 1547
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 17257,
+      "id": "1da6f80e-2dcf-4139-9d97-019605167f57",
+      "createdAt": "2025-05-13T11:24:02.961Z",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "deepseek-chat",
+      "provider": "deepseek",
+      "rating": 4,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "To fix the TypeScript errors, we need to properly narrow the type of `model` in each case of the switch statement. The issue is that TypeScript isn't automatically narrowing the type based on the `model.name` check. We can fix this by using a type predicate or by ensuring the type narrowing is correctly applied.\n\nHere's the corrected version:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Now TypeScript knows model is ModelInput\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Now TypeScript knows model is ModelOutput\n      return model.outputTokenLimit;\n    default:\n      // Handle ModelOther case if needed\n      return undefined;\n  }\n}\n```\n\nThe key changes are:\n1. The switch statement now properly narrows the type of `model` in each case\n2. Each case now only accesses properties that exist on the narrowed type\n3. Added a default case to handle the `ModelOther` type (you can return whatever makes sense for your use case)\n\nTypeScript's control flow analysis now correctly understands that:\n- When `model.name` is `\"gpt-4\"`, the type must be `ModelInput`\n- When `model.name` is `\"gpt-3.5-turbo\"`, the type must be `ModelOutput`\n- All other cases fall into the default case which handles `ModelOther`\n\nThis solution avoids type assertions and uses proper type narrowing through discriminated unions (the `name` property acts as the discriminant).",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 242,
+        "completionTokens": 406,
+        "totalTokens": 648
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 22711,
+      "id": "fbeb1eb3-73dc-4cd7-8db3-c5b5e53c26df",
+      "createdAt": "2025-05-13T11:24:08.415Z",
+      "notes": "mention predicate",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "gemini-2.5-pro-exp-03-25",
+      "provider": "google",
+      "rating": 5,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "To fix the TypeScript error using proper type narrowing without type assertions, you can use the `in` operator to check for the existence of the specific properties (`inputTokenLimit` or `outputTokenLimit`) within the `switch` cases. This will help TypeScript narrow down the type of `model` correctly.\n\nThe issue arises because `ModelOther` has `name: string`, which is a supertype of the literal string names `\"gpt-4\"` and `\"gpt-3.5-turbo\"`. Therefore, even when `model.name` is, for example, `\"gpt-4\"`, TypeScript narrows `model` to `ModelInput | ModelOther`. To safely access `inputTokenLimit`, you need to further confirm that `model` is indeed `ModelInput` and not `ModelOther` (which might coincidentally have its `name` property set to `\"gpt-4\"`).\n\nHere's the corrected code:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model): number | undefined {\n  switch (model.name) {\n    case \"gpt-4\":\n      // At this point, TypeScript knows model.name is \"gpt-4\".\n      // However, 'model' could be ModelInput or ModelOther (if ModelOther.name happens to be \"gpt-4\").\n      // So, 'model' is currently typed as ModelInput | ModelOther.\n      // We need to check for a property unique to ModelInput to fully narrow it.\n      if (\"inputTokenLimit\" in model) {\n        // Now TypeScript knows 'model' must be ModelInput,\n        // because ModelInput has 'inputTokenLimit' and ModelOther does not.\n        return model.inputTokenLimit;\n      }\n      // If it's a ModelOther with name \"gpt-4\", it won't have inputTokenLimit.\n      // In this case, we fall through and will return undefined.\n      break;\n    case \"gpt-3.5-turbo\":\n      // Similarly, 'model' is currently typed as ModelOutput | ModelOther.\n      if (\"outputTokenLimit\" in model) {\n        // Now TypeScript knows 'model' must be ModelOutput.\n        return model.outputTokenLimit;\n      }\n      // If it's a ModelOther with name \"gpt-3.5-turbo\", it won't have outputTokenLimit.\n      // Fall through to return undefined.\n      break;\n    // Optional: handle other ModelOther cases or default\n    // default:\n    //   // 'model' here would be ModelOther with a name not \"gpt-4\" or \"gpt-3.5-turbo\"\n    //   // Or it could be one of the ModelOther instances that fell through the checks above.\n    //   return undefined; // Or some other logic\n  }\n  // If no case returned a value (e.g., it was a ModelOther that matched a case name\n  // but didn't have the specific property, or model.name didn't match any case),\n  // the function will return undefined.\n  return undefined;\n}\n```\n\n**Explanation of Changes:**\n\n1.  **Explicit Return Type**: The function signature is updated to `getModelInfo(model: Model): number | undefined` to clearly state that it can return a number or `undefined`.\n2.  **`in` Operator for Narrowing**:\n    *   Inside `case \"gpt-4\":`, `model` is narrowed by TypeScript to `ModelInput | ModelOther`. The `if (\"inputTokenLimit\" in model)` check is then used. If this condition is true, TypeScript further narrows `model` to `ModelInput` because `inputTokenLimit` is a distinguishing property of `ModelInput` not present in `ModelOther`.\n    *   A similar logic is applied in `case \"gpt-3.5-turbo\":` using `if (\"outputTokenLimit\" in model)` to narrow `model` to `ModelOutput`.\n3.  **`break` Statements**: Added `break;` statements to ensure that if the property check fails (meaning it's a `ModelOther` instance whose `name` happens to match one of the specific model names), the code doesn't fall through to the next `case` (if any) or implicitly continue. Instead, it will break from the `switch` and hit the final `return undefined;`.\n4.  **Final `return undefined;`**: An explicit `return undefined;` at the end of the function handles all paths where a specific token limit is not returned. This includes cases where `model.name` doesn't match any specific case, or where it matches but the object is a `ModelOther` instance lacking the specific limit property.\n\nThis approach uses TypeScript's control flow analysis and type guards (`in` operator) to correctly narrow down the types without resorting to type assertions (`as`).",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 266,
+        "completionTokens": 1134,
+        "totalTokens": 1400
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 82322,
+      "id": "14dc2aae-df9c-474d-be88-9ec0c48aa156",
+      "createdAt": "2025-05-13T11:25:08.026Z",
+      "notes": "use in keyword\nverbose",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "gemini-2.5-pro-preview-05-06",
+      "provider": "google",
+      "rating": 5,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "To fix the TypeScript errors using proper type narrowing without type assertions, you can use the `in` operator to check for the existence of properties specific to `ModelInput` and `ModelOutput` within the respective `case` blocks. This will allow TypeScript to narrow down the type of `model` correctly.\n\nThe issue arises because `ModelOther` has `name: string`, which is a supertype of the literal string names `\"gpt-4\"` and `\"gpt-3.5-turbo\"`. So, when `model.name === \"gpt-4\"`, TypeScript narrows `model` to `ModelInput | ModelOther`. Accessing `inputTokenLimit` is unsafe because `ModelOther` doesn't have this property. A similar situation occurs for `\"gpt-3.5-turbo\"`.\n\nBy checking for a property unique to `ModelInput` (like `inputTokenLimit`) after confirming `model.name === \"gpt-4\"`, TypeScript can correctly infer that `model` must be of type `ModelInput`.\n\nHere's the corrected code:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n  // ModelOther does not have inputTokenLimit or outputTokenLimit\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model): number | undefined {\n  switch (model.name) {\n    case \"gpt-4\":\n      // After this case, TypeScript knows model.name is \"gpt-4\".\n      // The type of model is narrowed to ModelInput | ModelOther.\n      // To further narrow to ModelInput, we check for a property unique to ModelInput.\n      if ('inputTokenLimit' in model) {\n        // Now, TypeScript knows model is ModelInput because:\n        // 1. model.name is \"gpt-4\" (from the case).\n        // 2. 'inputTokenLimit' property exists on model.\n        // Only ModelInput in the union satisfies both conditions.\n        return model.inputTokenLimit;\n      }\n      // If 'inputTokenLimit' is not in model, it might be ModelOther\n      // with name: \"gpt-4\". In this case, we fall through.\n      break;\n    case \"gpt-3.5-turbo\":\n      // Similarly, model is narrowed to ModelOutput | ModelOther here.\n      if ('outputTokenLimit' in model) {\n        // Further narrowed to ModelOutput.\n        return model.outputTokenLimit;\n      }\n      // If 'outputTokenLimit' is not in model, it might be ModelOther\n      // with name: \"gpt-3.5-turbo\". Fall through.\n      break;\n    // default:\n      // This case would handle ModelOther instances with names other than\n      // \"gpt-4\" or \"gpt-3.5-turbo\".\n      // If we fall through from the specific cases above (e.g. ModelOther\n      // with name \"gpt-4\" but no inputTokenLimit), this default won't be hit\n      // unless explicitly designed to. The current structure will simply\n      // proceed to the final 'return undefined'.\n  }\n  // If no specific model info was found and returned, return undefined.\n  // This handles ModelOther cases or malformed objects that match a name\n  // but not the expected structure.\n  return undefined;\n}\n\n// Example Usage:\nconst gpt4Model: Model = { name: \"gpt-4\", inputTokenLimit: 8000 };\nconst gpt35Model: Model = { name: \"gpt-3.5-turbo\", outputTokenLimit: 4000 };\nconst otherModel: Model = { name: \"some-other-model\" };\nconst otherGpt4Like: Model = { name: \"gpt-4\" }; // This is ModelOther\n\nconsole.log(getModelInfo(gpt4Model)); // Expected: 8000\nconsole.log(getModelInfo(gpt35Model)); // Expected: 4000\nconsole.log(getModelInfo(otherModel)); // Expected: undefined\nconsole.log(getModelInfo(otherGpt4Like)); // Expected: undefined (it's ModelOther, lacks inputTokenLimit)\n\n```\n\n**Explanation of the fix:**\n\n1.  **`switch (model.name)`**: This statement starts the narrowing process.\n    *   In `case \"gpt-4\":`, TypeScript narrows `model` from `ModelInput | ModelOutput | ModelOther` to `ModelInput | ModelOther` because both `ModelInput` (`name: \"gpt-4\"`) and `ModelOther` (`name: string`, which can include `\"gpt-4\"`) could match this condition.\n    *   Similarly, in `case \"gpt-3.5-turbo\":`, `model` is narrowed to `ModelOutput | ModelOther`.\n\n2.  **`if ('inputTokenLimit' in model)`**: This is a type guard using the `in` operator.\n    *   Inside the `case \"gpt-4\":` block, if this condition is true, TypeScript knows that `model` has an `inputTokenLimit` property.\n    *   Given that `model` is currently `ModelInput | ModelOther`, and `ModelInput` is defined with `inputTokenLimit` while `ModelOther` is not, TypeScript can confidently narrow `model` to `ModelInput`.\n    *   Now, `model.inputTokenLimit` can be accessed safely.\n\n3.  **`if ('outputTokenLimit' in model)`**: This works analogously for the `gpt-3.5-turbo` case, narrowing `model` to `ModelOutput`.\n\n4.  **Return Type and Fallthrough**:\n    *   The function's return type is explicitly set to `number | undefined` to reflect that it might not always find the token limit (e.g., for `ModelOther` instances or if an object matches a name but not the expected properties).\n    *   If the `in` operator check fails within a `case`, the code `break`s (or implicitly falls through if `break` is omitted and there's no `return`) and eventually hits the final `return undefined;`. This handles cases where `model` might be `ModelOther` but happens to have a `name` like `\"gpt-4\"`.\n\nThis solution correctly uses TypeScript's type narrowing mechanisms without resorting to type assertions (`as`), making the code type-safe and robust.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 266,
+        "completionTokens": 1468,
+        "totalTokens": 1734
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 94213,
+      "id": "34029db2-66f4-4808-b999-886aa2b5ec96",
+      "createdAt": "2025-05-13T11:25:19.919Z",
+      "notes": "use in keyword\nverbose",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "mistralai/devstral-small",
+      "provider": "openrouter",
+      "rating": 6,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "To fix the TypeScript error, you need to narrow down the type of `model` within the `switch` statement. You can achieve this by using `is` type guards. Here's the corrected code:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction isModelInput(model: Model): model is ModelInput {\n  return (model as ModelInput).name === \"gpt-4\";\n}\n\nfunction isModelOutput(model: Model): model is ModelOutput {\n  return (model as ModelOutput).name === \"gpt-3.5-turbo\";\n}\n\nfunction getModelInfo(model: Model) {\n  if (isModelInput(model)) {\n    return model.inputTokenLimit;\n  } else if (isModelOutput(model)) {\n    return model.outputTokenLimit;\n  } else {\n    // Handle the case where the model is of type ModelOther\n    return \"Unknown model type\";\n  }\n}\n```\n\nIn this code, `isModelInput` and `isModelOutput` are type guard functions that help TypeScript understand the specific type of `model` within the `if` and `else if` blocks. This way, TypeScript can correctly infer the properties of `model` and avoid the errors.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 243,
+        "completionTokens": 316,
+        "totalTokens": 559,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 2534,
+      "id": "2ce95445-0f00-4c45-aa78-6fb202c26317",
+      "createdAt": "2025-05-21T15:59:34.736Z",
+      "notes": "almost correct",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "claude-sonnet-4-20250514",
+      "provider": "anthropic",
+      "rating": 8,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "The issue is that `ModelOther` has `name: string`, which means it can potentially match any string value, including \"gpt-4\" and \"gpt-3.5-turbo\". TypeScript can't definitively narrow the type because `ModelOther` could theoretically have those names too.\n\nHere are two solutions:\n\n## Solution 1: Use discriminated unions with literal types\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: Exclude<string, \"gpt-4\" | \"gpt-3.5-turbo\">;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      return model.inputTokenLimit; // ✅ Works\n    case \"gpt-3.5-turbo\":\n      return model.outputTokenLimit; // ✅ Works\n  }\n}\n```\n\n## Solution 2: Add type guards with property checks\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction hasInputTokenLimit(model: Model): model is ModelInput {\n  return 'inputTokenLimit' in model;\n}\n\nfunction hasOutputTokenLimit(model: Model): model is ModelOutput {\n  return 'outputTokenLimit' in model;\n}\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      if (hasInputTokenLimit(model)) {\n        return model.inputTokenLimit; // ✅ Works\n      }\n      break;\n    case \"gpt-3.5-turbo\":\n      if (hasOutputTokenLimit(model)) {\n        return model.outputTokenLimit; // ✅ Works\n      }\n      break;\n  }\n}\n```\n\n**Solution 1 is cleaner** as it prevents `ModelOther` from having the specific names that belong to other model types, making the discriminated union work properly.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 289,
+        "completionTokens": 597,
+        "totalTokens": 886,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 10503,
+      "id": "f7986fff-1ff4-4a39-ae36-bd09b433366f",
+      "createdAt": "2025-05-22T19:00:59.121Z",
+      "notes": "second method works",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    },
+    {
+      "prompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.",
+      "context": [
+        "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+      ],
+      "model": "claude-opus-4-20250514",
+      "provider": "anthropic",
+      "rating": 8.5,
+      "experimentId": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "promptStructure": "F",
+      "images": [],
+      "response": "The issue is that TypeScript can't narrow the type based on the `name` property alone because `ModelOther` has a `name` property of type `string`, which overlaps with the literal types `\"gpt-4\"` and `\"gpt-3.5-turbo\"`.\n\nHere's the fix using proper type narrowing with type predicates:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\n// Type guard functions\nfunction isModelInput(model: Model): model is ModelInput {\n  return model.name === \"gpt-4\" && \"inputTokenLimit\" in model;\n}\n\nfunction isModelOutput(model: Model): model is ModelOutput {\n  return model.name === \"gpt-3.5-turbo\" && \"outputTokenLimit\" in model;\n}\n\nfunction getModelInfo(model: Model) {\n  if (isModelInput(model)) {\n    return model.inputTokenLimit;\n  }\n  \n  if (isModelOutput(model)) {\n    return model.outputTokenLimit;\n  }\n  \n  // Handle ModelOther case\n  return undefined;\n}\n```\n\nAlternatively, you can use inline type narrowing with property checks:\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      if (\"inputTokenLimit\" in model) {\n        return model.inputTokenLimit;\n      }\n      break;\n    case \"gpt-3.5-turbo\":\n      if (\"outputTokenLimit\" in model) {\n        return model.outputTokenLimit;\n      }\n      break;\n  }\n  return undefined;\n}\n```\n\nThe key insight is that checking the `name` property alone isn't sufficient because `ModelOther` can have any string value for `name`, including `\"gpt-4\"` or `\"gpt-3.5-turbo\"`. By also checking for the presence of the specific properties (`inputTokenLimit` or `outputTokenLimit`), TypeScript can properly narrow the type.",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 289,
+        "completionTokens": 637,
+        "totalTokens": 926,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Fix the typescript error by using proper type narrowing. Do not use type assertions.\n\n```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```",
+      "durationMs": 21617,
+      "id": "81e3dd6f-91e0-460b-9388-181b5f2d7ca8",
+      "createdAt": "2025-05-22T19:01:10.234Z",
+      "notes": "both methods work",
+      "contextId": [
+        "900289b7-795f-468f-b04a-6a70a89a2f73"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "id": "85d27d32-4362-4fef-af58-c6cebc1e7397",
+      "name": "TypeScript narrowing (Uncommon)",
+      "category": "coding",
+      "createdAt": "2025-05-16T07:42:44.697Z",
+      "evalFunctionId": "0fd02612-a635-434d-b6bf-96dde9ebbffa"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "900289b7-795f-468f-b04a-6a70a89a2f73",
+      "name": "TypeScript narrowing error code",
+      "type": "text",
+      "content": "```ts\ntype ModelInput = {\n  inputTokenLimit: number;\n  name: \"gpt-4\";\n};\n\ntype ModelOutput = {\n  outputTokenLimit: number;\n  name: \"gpt-3.5-turbo\";\n};\n\ntype ModelOther = {\n  name: string;\n};\n\ntype Model = ModelInput | ModelOutput | ModelOther;\n\nfunction getModelInfo(model: Model) {\n  switch (model.name) {\n    case \"gpt-4\":\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelInput | ModelOther'.\n      // Error: Property 'inputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.inputTokenLimit;\n    case \"gpt-3.5-turbo\":\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOutput | ModelOther'.\n      // Error: Property 'outputTokenLimit' does not exist on type 'ModelOther'.ts(2339)\n      return model.outputTokenLimit;\n  }\n}\n```"
+    }
+  ]
+}
