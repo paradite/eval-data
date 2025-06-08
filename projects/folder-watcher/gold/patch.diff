@@ -1,0 +1,29 @@
+From 9d3852274f618168d53268bc209131726442b940 Mon Sep 17 00:00:00 2001
+From: Zhu Liang <zhuliangg11@gmail.com>
+Date: Tue, 3 Jun 2025 16:07:36 +0800
+Subject: [PATCH] feat: ignore suffix for auto add
+
+---
+ packages/renderer/src/use/useFileOperations.ts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/packages/renderer/src/use/useFileOperations.ts b/packages/renderer/src/use/useFileOperations.ts
+index 7180403..5dc7fb7 100644
+--- a/packages/renderer/src/use/useFileOperations.ts
++++ b/packages/renderer/src/use/useFileOperations.ts
+@@ -400,6 +400,15 @@ export function useFileOperations(
+       const belongsToCurrentWorkspace = normalizedFilePath.startsWith(normalizedCommonPrefix);
+ 
+       if (belongsToCurrentWorkspace) {
++        const suffixesToIgnore = getIgnoredSuffixes(ignoredSuffixesRef.value);
++        if (
++          suffixesToIgnore.some(suffix => filePath.toLowerCase().endsWith(suffix.toLowerCase()))
++        ) {
++          const fileName = getPathBaseName(filePath);
++          displayNotification(`Ignored new file "${fileName}" (ignored suffix).`, true);
++          console.log('Ignored new file due to suffix:', filePath);
++          return;
++        }
+         // Add the new file with includeInCodeContext set to true
+         const result = addFile(filePath, true, true, false);
+         if (result) {
