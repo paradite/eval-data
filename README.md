@@ -26,6 +26,10 @@ Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.
 
 [typescript-narrowing](/projects/typescript-narrowing/) - Coding TypeScript narrowing tests.
 
+### Clean Markdown
+
+[clean-markdown](/projects/clean-markdown/) - Clean markdown into plain text.
+
 ## Writing Projects
 
 ### AI Timeline

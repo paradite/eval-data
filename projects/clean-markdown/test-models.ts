@@ -1,6 +1,7 @@
 import { cleanMarkdown } from './cleanMarkdown.ts';
 import { cleanMarkdown as cleanMarkdownGpt41 } from './model-responses/gpt-4.1.ts';
 import { cleanMarkdown as cleanMarkdownSonnet4 } from './model-responses/sonnet-4.ts';
+import { cleanMarkdown as cleanMarkdownGemini25Pro } from './model-responses/gemini-2.5-pro.ts';
 import { readFileSync, writeFileSync } from 'fs';
 import { diffChars } from 'diff';
 
@@ -48,6 +49,11 @@ const models: ModelConfig[] = [
     name: 'Claude Sonnet 4',
     cleanFunction: cleanMarkdownSonnet4,
     outputPath: './model-responses/sonnet-4.md',
+  },
+  {
+    name: 'Gemini 2.5 Pro',
+    cleanFunction: cleanMarkdownGemini25Pro,
+    outputPath: './model-responses/gemini-2.5-pro.md',
   },
 ];
 
