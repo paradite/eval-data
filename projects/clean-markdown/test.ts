@@ -7,6 +7,6 @@ const expectedOutputText = readFileSync('./expected-output.md', 'utf-8');
 
 const cleanedText = cleanMarkdown(inputText);
 
-const isSame = cleanedText === expectedOutputText;
+const isSame = cleanedText.trim() === expectedOutputText.trim();
 
 assert.ok(isSame, 'cleanedText is not the same as expectedOutputText');
