@@ -6,6 +6,10 @@ import { cleanMarkdown as cleanMarkdownOpus4 } from './model-responses/opus-4.ts
 import { cleanMarkdown as cleanMarkdownDeepSeekV3 } from './model-responses/deepseek-v3.ts';
 import { cleanMarkdown as cleanMarkdownO3 } from './model-responses/o3.ts';
 import { cleanMarkdown as cleanMarkdownGrok4 } from './model-responses/grok-4.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2Groq1 } from './model-responses/kimi-k2-groq-1.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2DeepInfra1 } from './model-responses/kimi-k2-deepinfra-1.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2DeepInfra2 } from './model-responses/kimi-k2-deepinfra-2.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2DeepInfra3 } from './model-responses/kimi-k2-deepinfra-3.ts';
 
 import { readFileSync, writeFileSync } from 'fs';
 import { diffChars } from 'diff';
@@ -30,7 +34,7 @@ function testModel(config: ModelConfig, inputText: string, expectedOutputText: s
   console.log(config.name, isSame);
   
   if (!isSame) {
-    const diff = diffChars(expectedOutputText, cleanedText).filter(
+    const diff = diffChars(expectedOutputText.trim(), cleanedText.trim()).filter(
       (d) => d.added || d.removed
     );
     console.log('number of diff', diff.length);
@@ -79,6 +83,26 @@ const models: ModelConfig[] = [
     name: 'Grok 4',
     cleanFunction: cleanMarkdownGrok4,
     outputPath: './model-responses/grok-4.md',
+  },
+  {
+    name: 'Kimi K2 Groq 1',
+    cleanFunction: cleanMarkdownKimiK2Groq1,
+    outputPath: './model-responses/kimi-k2-groq-1.md',
+  },
+  {
+    name: 'Kimi K2 DeepInfra 1',
+    cleanFunction: cleanMarkdownKimiK2DeepInfra1,
+    outputPath: './model-responses/kimi-k2-deepinfra-1.md',
+  },
+  {
+    name: 'Kimi K2 DeepInfra 2',
+    cleanFunction: cleanMarkdownKimiK2DeepInfra2,
+    outputPath: './model-responses/kimi-k2-deepinfra-2.md',
+  },
+  {
+    name: 'Kimi K2 DeepInfra 3',
+    cleanFunction: cleanMarkdownKimiK2DeepInfra3,
+    outputPath: './model-responses/kimi-k2-deepinfra-3.md',
   },
 ];
 
