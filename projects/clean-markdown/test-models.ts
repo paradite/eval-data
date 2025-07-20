@@ -6,10 +6,12 @@ import { cleanMarkdown as cleanMarkdownOpus4 } from './model-responses/opus-4.ts
 import { cleanMarkdown as cleanMarkdownDeepSeekV3 } from './model-responses/deepseek-v3.ts';
 import { cleanMarkdown as cleanMarkdownO3 } from './model-responses/o3.ts';
 import { cleanMarkdown as cleanMarkdownGrok4 } from './model-responses/grok-4.ts';
-import { cleanMarkdown as cleanMarkdownKimiK2Groq1 } from './model-responses/kimi-k2-groq-1.ts';
 import { cleanMarkdown as cleanMarkdownKimiK2DeepInfra1 } from './model-responses/kimi-k2-deepinfra-1.ts';
 import { cleanMarkdown as cleanMarkdownKimiK2DeepInfra2 } from './model-responses/kimi-k2-deepinfra-2.ts';
 import { cleanMarkdown as cleanMarkdownKimiK2DeepInfra3 } from './model-responses/kimi-k2-deepinfra-3.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2Groq1 } from './model-responses/kimi-k2-groq-1.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2Groq2 } from './model-responses/kimi-k2-groq-2.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2Groq3 } from './model-responses/kimi-k2-groq-3.ts';
 
 import { readFileSync, writeFileSync } from 'fs';
 import { diffChars } from 'diff';
@@ -85,11 +87,6 @@ const models: ModelConfig[] = [
     outputPath: './model-responses/grok-4.md',
   },
   {
-    name: 'Kimi K2 Groq 1',
-    cleanFunction: cleanMarkdownKimiK2Groq1,
-    outputPath: './model-responses/kimi-k2-groq-1.md',
-  },
-  {
     name: 'Kimi K2 DeepInfra 1',
     cleanFunction: cleanMarkdownKimiK2DeepInfra1,
     outputPath: './model-responses/kimi-k2-deepinfra-1.md',
@@ -103,6 +100,21 @@ const models: ModelConfig[] = [
     name: 'Kimi K2 DeepInfra 3',
     cleanFunction: cleanMarkdownKimiK2DeepInfra3,
     outputPath: './model-responses/kimi-k2-deepinfra-3.md',
+  },
+  {
+    name: 'Kimi K2 Groq 1',
+    cleanFunction: cleanMarkdownKimiK2Groq1,
+    outputPath: './model-responses/kimi-k2-groq-1.md',
+  },
+  {
+    name: 'Kimi K2 Groq 2',
+    cleanFunction: cleanMarkdownKimiK2Groq2,
+    outputPath: './model-responses/kimi-k2-groq-2.md',
+  },
+  {
+    name: 'Kimi K2 Groq 3', 
+    cleanFunction: cleanMarkdownKimiK2Groq3,
+    outputPath: './model-responses/kimi-k2-groq-3.md',
   },
 ];
 
