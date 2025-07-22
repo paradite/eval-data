@@ -1,4 +1,4 @@
-# Rubrics for TypeScript Narrowing Project
+# Rubrics for Folder Watcher Project
 
 Criteria:
 - Correctly solved the task: 9/10
