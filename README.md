@@ -36,6 +36,16 @@ Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.
 
 [ai-timeline](/projects/ai-timeline/) - Writing an AI Timeline.
 
+## Image Analysis Projects
+
+### Kanji
+
+[kanji](/projects/kanji/) - Image analysis and explanation related to kanji and Chinese characters.
+
+### Water bottle
+
+[water-bottle](/projects/water-bottle/) - Image analysis and explanation related to water bottle and physics.
+
 ## Model Evaluation Results
 
 [model-eval-results](/model-eval-results/) - Raw results exported from [16x Eval](https://eval.16x.engineer/) for models evaluations.
