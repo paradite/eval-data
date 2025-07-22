@@ -1,0 +1,678 @@
+{
+  "evals": [
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "claude-sonnet-4-20250514",
+      "provider": "anthropic",
+      "rating": 8,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "response": "```typescript\nexport function cleanMarkdown(markdown: string): string {\n  let text = markdown;\n\n  // Remove frontmatter\n  text = text.replace(/^---\\n[\\s\\S]*?\\n---\\n/m, '');\n\n  // Remove import statements\n  text = text.replace(/^import\\s+.*$/gm, '');\n\n  // Remove React components\n  text = text.replace(/<[A-Z][^>]*>[\\s\\S]*?<\\/[A-Z][^>]*>/g, '');\n  text = text.replace(/<[A-Z][^>]*\\/>/g, '');\n\n  // Remove tables\n  text = text.replace(/^\\|.*\\|$/gm, '');\n  text = text.replace(/^\\|[-:\\s|]*\\|$/gm, '');\n\n  // Replace headings with plain text\n  text = text.replace(/^#+\\s+(.*)$/gm, '$1');\n\n  // Unwrap markdown links\n  text = text.replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1');\n\n  // Unwrap code blocks\n  text = text.replace(/^```[^\\n]*\\n([\\s\\S]*?)\\n```$/gm, '$1');\n\n  // Clean up extra whitespace and empty lines\n  text = text.replace(/\\n\\s*\\n\\s*\\n/g, '\\n\\n');\n  text = text.replace(/^\\s*\\n/gm, '');\n\n  return text;\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 687,
+        "completionTokens": 374,
+        "completionTokensWithoutThoughts": 374,
+        "totalTokens": 1061,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 7610,
+      "id": "19cd8899-7beb-4524-a118-37e43ca48893",
+      "createdAt": "2025-07-17T13:22:59.683Z",
+      "notes": "no new lines",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8.5,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "groq"
+        ]
+      },
+      "response": "```ts\nexport function cleanMarkdown(markdown: string): string {\n  return markdown\n    // Remove frontmatter\n    .replace(/^---[\\s\\S]*?^---\\s*\\n?/m, \"\")\n\n    // Remove import statements\n    .replace(/^import\\s+.*;?\\s*$/gm, \"\")\n\n    // Remove tables\n    .replace(/^\\|.*\\|.*(?:\\n\\|.*\\|.*|\\n[\\s\\S]*?\\|.*\\|.*)*\\n?/gm, \"\")\n\n    // Remove react components (jsx like)\n    .replace(/<[^>\\s][^>]*(?:\\s[^>]*?)?(?:\\/>|>.*?<\\/[^>]+>)/gs, \"\")\n\n    // Unwrap code blocks (remove triple backticks + optional language)\n    .replace(/```(?:\\w*)?[\\n\\r]?([\\s\\S]*?)```/g, (_, code) => code.trim())\n\n    // Unwrap markdown links [text](url) -> text\n    .replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, \"$1\")\n\n    // Replace headings (#, ##, ###, etc.) with plain text (remove leading # and space)\n    .replace(/^(#{1,6})\\s*(.+)$/gm, \"$2\")\n    .trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 578,
+        "completionTokens": 286,
+        "completionTokensWithoutThoughts": 286,
+        "totalTokens": 864,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 5791,
+      "id": "2b0cf38b-1700-46e9-b747-b2613447505d",
+      "createdAt": "2025-07-19T07:40:30.395Z",
+      "notes": "1 new line issue",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8.5,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "deepinfra"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(text: string): string {\n  let cleaned = text;\n\n  // Remove frontmatter\n  cleaned = cleaned.replace(/^---[\\s\\S]*?---\\s*/gm, '');\n\n  // Remove import statements\n  cleaned = cleaned.replace(/^\\s*import\\s+.*$/gm, '');\n\n  // Remove react components\n  cleaned = cleaned.replace(/<[^>]*\\/>/g, '');\n  cleaned = cleaned.replace(/<[^>]*>[\\s\\S]*?<\\/[^>]*>/g, '');\n\n  // Remove tables\n  cleaned = cleaned.replace(/^\\|.*(?:\\r?\\n\\|.*)+/gm, '');\n\n  // Replace headings with plain text\n  cleaned = cleaned.replace(/^#{1,6}\\s+(.*)/gm, '$1');\n\n  // Replace markdown links with plain text\n  cleaned = cleaned.replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1');\n\n  // Unwrap code blocks\n  cleaned = cleaned.replace(/```[\\s\\S]*?\\n([\\s\\S]*?)```/g, '$1');\n\n  return cleaned.trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 578,
+        "completionTokens": 241,
+        "completionTokensWithoutThoughts": 241,
+        "totalTokens": 819,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 6194,
+      "id": "e19cbbf6-06e7-42be-b67c-971748eac570",
+      "createdAt": "2025-07-19T07:40:30.798Z",
+      "notes": "3 new line issues",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "gemini-2.5-pro",
+      "provider": "google",
+      "rating": 9,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "response": "```typescript\nexport const cleanMarkdown = (markdown: string): string => {\n  let cleanedText = markdown;\n\n  const codeBlocks = new Map<string, string>();\n  let blockIndex = 0;\n\n  // 1. Isolate and store code blocks, replacing them with a placeholder.\n  // This prevents other rules from affecting the content within code blocks.\n  cleanedText = cleanedText.replace(\n    /```(?:\\w*)\\n([\\s\\S]*?)\\n```/g,\n    (match, codeContent) => {\n      const placeholder = `___CODE_BLOCK_PLACEHOLDER_${blockIndex++}___`;\n      codeBlocks.set(placeholder, codeContent);\n      return placeholder;\n    }\n  );\n\n  // 2. Remove YAML frontmatter (the --- block at the beginning).\n  cleanedText = cleanedText.replace(/^---\\s*[\\s\\S]*?^---\\s*\\n?/m, '');\n\n  // 3. Remove import statements (often found in MDX).\n  cleanedText = cleanedText.replace(/^import\\s+.*from\\s+['\"].*['\"];?\\n?/gm, '');\n\n  // 4. Remove React/JSX components.\n  // This is a best-effort approach for simple cases like <Component>...</Component>\n  // and self-closing <Component />.\n  cleanedText = cleanedText.replace(/<[A-Z][\\s\\S]*?<\\/[A-Z][^>]*>/g, '');\n  cleanedText = cleanedText.replace(/<\\s*[A-Z][^>]*\\/>/g, '');\n\n  // 5. Remove markdown tables.\n  cleanedText = cleanedText.replace(\n    /^\\|[^\\n]+\\|\\n\\|\\s*[-:]+\\s*\\|[^\\n]*\\n(?:\\|[^\\n]+\\|\\n?)*/gm,\n    ''\n  );\n\n  // 6. Replace headings with plain text (e.g., \"# Heading\" becomes \"Heading\").\n  cleanedText = cleanedText.replace(/^#+\\s+(.*)/gm, '$1');\n\n  // 7. Unwrap markdown links (e.g., \"[link text](url)\" becomes \"link text\").\n  cleanedText = cleanedText.replace(/\\[([^\\]]+)\\]\\([^\\)]+\\)/g, '$1');\n\n  // 8. Restore the unwrapped code blocks.\n  for (const [placeholder, codeContent] of codeBlocks.entries()) {\n    cleanedText = cleanedText.replace(placeholder, codeContent);\n  }\n\n  // 9. Final cleanup: collapse extra newlines and trim whitespace.\n  cleanedText = cleanedText.replace(/\\n{3,}/g, '\\n\\n').trim();\n\n  return cleanedText;\n};\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 625,
+        "completionTokens": 8963,
+        "completionTokensWithoutThoughts": 623,
+        "totalTokens": 9588,
+        "thoughtsTokens": 8340
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 93173,
+      "id": "6ac5e6dd-cc57-4f38-91f3-2f8bf846fb18",
+      "createdAt": "2025-07-17T13:24:25.247Z",
+      "notes": "correct",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8.5,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "deepinfra"
+        ]
+      },
+      "response": "```typescript\n/**\n * Cleans a markdown text by:\n * - Unwrapping code blocks\n * - Unwrapping markdown links\n * - Replacing headings with plain text\n * - Removing tables\n * - Removing react components\n * - Removing import statements\n * - Removing frontmatter\n */\nexport function cleanMarkdown(source: string): string {\n  return (\n    source\n      // 1. Strip frontmatter (--- ... ---)\n      .replace(/^---[\\s\\S]*?---\\s*/m, '')\n\n      // 2. Remove import statements\n      .replace(/^import\\s[\\s\\S]*?$/gm, '')\n\n      // 3. Remove JSX / React components  (<...>)\n      .replace(/<\\/?[^>]+(?:\\s.*?)?\\/?\\s*>/gs, '')\n\n      // 4. Remove tables (`|...|` split by newlines)\n      .replace(/^\\s*\\|.*?\\|.*(?:\\n^\\s*\\|.*?\\|.*)*\\n?/gm, '')\n\n      // 5. Remove heading markers (# ## ### …) keeping the rest as plain\n      .replace(/^(#{1,6})\\s*(.*)$/gm, '$2')\n\n      // 6. Unwrap markdown links [...](...) → just the text\n      .replace(/\\[([^\\]]+)]\\([^)]+\\)/g, '$1')\n\n      // 7. Extricate fenced code blocks\n      //    ```lang ... ```\n      .replace(/```(?:\\w+)?\\s*\\n?([\\s\\S]*?)\\n?```/g, '$1')\n\n      // 8. Extricate inline code blocks with single backtick\n      .replace(/`([^`]+)`/g, '$1')\n\n      // 9. Collapse multiple blank lines into single\n      .replace(/\\n{3,}/g, '\\n\\n')\n\n      // 10. Trim leading & trailing whitespace\n      .trim()\n  );\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 578,
+        "completionTokens": 418,
+        "completionTokensWithoutThoughts": 418,
+        "totalTokens": 996,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 7779,
+      "id": "f7d35882-1d02-46e4-83fb-6a8d4dfdf8c6",
+      "createdAt": "2025-07-19T07:58:41.073Z",
+      "notes": "1 new line issue",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 9,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "groq"
+        ]
+      },
+      "response": "```ts\nexport function cleanMarkdown(text: string): string {\n  // Remove frontmatter\n  text = text.replace(/^---[\\s\\S]*?---\\n*/, '');\n\n  // Unwrap markdown links\n  text = text.replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1');\n\n  // Replace headings with plain text\n  text = text.replace(/^(#{1,6})\\s*(.+)$/gm, '$2');\n\n  // Remove tables\n  text = text.replace(/^\\|.*\\|.*(?:\\n|$)/gm, '');\n\n  // Remove react components\n  text = text.replace(/<[^>\\s]+[^>]*>(?:[^<]*|(?!<\\/[^>]*>)[\\s\\S])*<\\/[^>]*>/g, '');\n  text = text.replace(/<[^>\\/]+[^>]*\\/?>/g, '');\n\n  // Remove import statements\n  text = text.replace(/^import\\s+.*$/gm, '');\n\n  // Unwrap code blocks\n  text = text.replace(/```[\\s\\S]*?\\n([\\s\\S]*?)```/g, '$1');\n  text = text.replace(/( *)(```)/g, '');\n\n  // Clean up multiple newlines\n  text = text.replace(/\\n{2,}/g, '\\n\\n').trim();\n\n  return text;\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 578,
+        "completionTokens": 289,
+        "completionTokensWithoutThoughts": 289,
+        "totalTokens": 867,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 3619,
+      "id": "f07eed41-fa64-4fb4-8cb1-f22b75486b4f",
+      "createdAt": "2025-07-19T08:16:26.857Z",
+      "notes": "correct",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "deepinfra"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(text: string): string {\n  let cleaned = text;\n\n  // Remove frontmatter\n  cleaned = cleaned.replace(/^---[\\s\\S]*?---\\n?/, '');\n\n  // Remove import statements\n  cleaned = cleaned.replace(/^\\s*import\\s+.*?\\s+from\\s+['\"`].*['\"`]\\s*;?\\s*[\\r\\n]/gm, '');\n\n  // Remove react components\n  cleaned = cleaned.replace(/<[^>]+>[\\s\\S]*?<\\/[^>]+>/g, '');\n  cleaned = cleaned.replace(/<[^\\/][^>]*\\/>/g, '');\n\n  // Remove tables\n  cleaned = cleaned.replace(/^\\|.*?\\|.*?\\|[\\r\\n](?:\\|.*?\\|.*?\\|[\\r\\n]?)*|^\\|.*?\\|[\\r\\n](?:\\|.*?\\|[\\r\\n]?)*|^\\|.*?\\|[ ]*\\|[ ]*[\\r\\n](?:\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]?)*|^\\|.*?\\|[\\r\\n]+(?:\\|(?:(?: ?\\-+ ?)+(?=\\|))(?:\\|[ ]*\\-*[ ]*)+[\\r\\n])(?:\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]?)*|^\\|.*?\\|[\\r\\n]+(?:\\|(?:(?: ?\\-+ ?)+(?=\\|))(?:\\|[ ]*\\-*[ ]*)+[\\r\\n])(?:\\|.*?\\|[ \\r\\n]?)*|^\\|.*?\\|.*?\\|[\\r\\n]+\\|(?:(?: ?\\-+ ?)+(?=\\|))(?:\\|[ ]*\\-*[ ]*)+\\|[\\r\\n](?:\\|.*?\\|.*?\\|[ \\r\\n]?)*|^\\|.*?\\|[\\r\\n]+\\|(?:(?: ?\\-+ ?)+(?=\\|))(?:\\|[ ]*\\-*[ ]*)+\\|[\\r\\n](?:\\|.*?\\|[ \\r\\n]?)*|^\\|.*?\\|[\\r\\n]+(?:(?:\\|?(:?---+)---+\\|[\\r\\n])+)(?:\\|.*?[ \\r\\n]?)*|^\\|.*?\\|[\\r\\n]+(?:(?:\\|[ ]*\\:?[ ]*\\-+[ ]*\\:?[ ]*(?=\\|)[\\r\\n])+)(?:\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]?)*|^\\|.*?\\|[\\r\\n]+(?:\\|[ ]*\\:?[ ]*\\-+[ ]*\\:?[ ]*[\\r\\n])+[\\r\\n](?:\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]?)*|^\\|.*?\\|[\\r\\n]+(?:\\|[ ]*\\:?[ ]*\\-+[ ]*\\:?[ ]*[\\r\\n])+[\\r\\n](?:\\|.*?\\|[ \\r\\n]?)*|^\\|.*?\\|[\\r\\n]+\\|(?:[\\r\\n]|(?:\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]?)*|(?:\\|.*?\\|[ \\r\\n]?)*)|^\\|.*?\\|[\\r\\n]+\\|[\\r\\n](?:\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]?)*|^\\|(?:(?:.*?\\|){2,}[\\r\\n])(?:\\|.*?\\|[\\r\\n]?)*|^\\|.*?\\|[\\r\\n](?:\\|.*?\\|[\\r\\n]?)*|^\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]+(?:\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]?)*|^\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]+\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]?|^\\|.*?\\|[ ]*\\|[ ]*[\\r\\n]+(.*?\\|[ ]*\\|[ ]*[\\r\\n]?)*|^\\|.*?\\|[ ]*\\|[ ]*[\\r\\n](?:\\|.*?\\|[ \\r\\n]?)+/gm, '');\n\n  // Unwrap code blocks\n  cleaned = cleaned.replace(/```[\\s\\S]*?\\n([\\s\\S]*?)\\n```/g, '$1');\n  cleaned = cleaned.replace(/```(.*?)```/gs, '$1');\n\n  // Remove headings marks (#, ##, ###, etc.)\n  cleaned = cleaned.replace(/^\\s*#{1,6}\\s*(.*)$/gm, '$1');\n\n  // Unwrap markdown links\n  cleaned = cleaned.replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1');\n\n  // Clean up extra blank lines (keep only one)\n  cleaned = cleaned.replace(/\\n{3,}/g, '\\n\\n');\n\n  // Trim leading/trailing whitespace\n  cleaned = cleaned.trim();\n\n  return cleaned;\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 578,
+        "completionTokens": 1032,
+        "completionTokensWithoutThoughts": 1032,
+        "totalTokens": 1610,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 16348,
+      "id": "374c8e05-2806-41bf-9245-7cac7e2456ab",
+      "createdAt": "2025-07-19T08:16:39.585Z",
+      "notes": "1 new line issue\nlong regex",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8.5,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "groq"
+        ]
+      },
+      "response": "```ts\nexport function cleanMarkdown(markdown: string): string {\n  return markdown\n    // Remove frontmatter\n    .replace(/^---\\r?\\n[\\s\\S]*?\\r?\\n---\\r?\\n/g, '')\n    // Remove tables (single-line replacement only – drops the whole line)\n    .replace(/^\\s*\\|.*(?:\\r?\\n|$)/gm, '')\n    // Remove import statements\n    .replace(/^\\s*import\\s+.*\\s+from\\s+['\"`]([^'\"`]+)['\"`];?\\s*$/gm, '')\n    .replace(/^\\s*import\\s+['\"`]([^'\"`]+)['\"`];?\\s*$/gm, '')\n    // Remove React/JSX components\n    .replace(/<[\\w/-]+[^>]*[\\s\\S]*?>[\\s\\S]*?<\\/[\\w/-]+>/g, '')\n    .replace(/<[\\w/-]+[^>]*\\s*\\/?>/g, '')\n    // Unwrap code blocks\n    .replace(/```[\\s\\S]*?\\n([\\s\\S]*?)```/g, '$1')\n    // Replace headings with plain text\n    .replace(/^\\s*#{1,6}\\s*/gm, '')\n    // Unwrap markdown links\n    .replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1')\n    .trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 578,
+        "completionTokens": 300,
+        "completionTokensWithoutThoughts": 300,
+        "totalTokens": 878,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 1961,
+      "id": "cf79528c-dd4a-4fc9-91a2-1598f15bf6e4",
+      "createdAt": "2025-07-19T09:05:04.265Z",
+      "notes": "3 new line issues",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 9,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "moonshotai"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(markdown: string): string {\n  let cleaned = markdown;\n  \n  // Remove frontmatter\n  cleaned = cleaned.replace(/^---[\\s\\S]*?^---\\s*/m, '');\n  \n  // Remove import statements\n  cleaned = cleaned.replace(/^import\\s+.*?;?\\s*$/gm, '');\n  \n  // Remove react components\n  cleaned = cleaned.replace(/<[^>]+>[\\s\\S]*?<\\/[^>]+>/g, '');\n  cleaned = cleaned.replace(/<[^/]+\\/>/g, '');\n  cleaned = cleaned.replace(/<[^>]+>/g, '');\n  \n  // Remove tables\n  cleaned = cleaned.replace(/^\\|.*\\|.*\\n(?:^\\|.*\\|.*\\n)*(?:^\\|.*\\|.*(?:\\n|$))*/gm, '');\n  \n  // Unwrap markdown links\n  cleaned = cleaned.replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1');\n  \n  // Replace headings with plain text\n  cleaned = cleaned.replace(/^#{1,6}\\s+(.*$)/gm, '$1');\n  \n  // Unwrap code blocks\n  cleaned = cleaned.replace(/```[\\s\\S]*?\\n([\\s\\S]*?)\\n```/g, (match, g1) => g1.trim());\n  cleaned = cleaned.replace(/```[\\s\\S]*?\\n?([\\s\\S]*?)\\n?```/g, (match, g1) => g1.trim());\n  \n  // Clean up multiple newlines\n  cleaned = cleaned.replace(/\\n{3,}/g, '\\n\\n');\n  \n  return cleaned.trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 560,
+        "completionTokens": 352,
+        "completionTokensWithoutThoughts": 352,
+        "totalTokens": 912,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 25429,
+      "id": "4fbb6ecd-7e62-47f3-a02e-037ef4df106e",
+      "createdAt": "2025-07-19T09:24:33.576Z",
+      "notes": "correct",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 9,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "moonshotai"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(markdown: string): string {\n  return markdown\n    // Remove frontmatter\n    .replace(/^---[\\s\\S]*?^---\\s*/m, '')\n    // Remove react components\n    .replace(/<[^>]*>([\\s\\S]*?<[^>]*>)*[^>]*>/g, '')\n    // Remove import statements\n    .replace(/^(import\\s.*|export\\s.*)\\s*$/gm, '')\n    // Replace headings with plain text\n    .replace(/^(#{1,6})\\s+(.*)$/gm, '$2')\n    // Remove tables\n    .replace(/^\\|.*\\|.*(\\n\\|.*\\|.*)*$/gm, '')\n    // Unwrap markdown links\n    .replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1')\n    // Unwrap code blocks\n    .replace(/```[^\\n]*\\n([\\s\\S]*?)```/g, '$1')\n    .replace(/```$/gm, '')\n    // Clean up empty lines\n    .replace(/\\n{3,}/g, '\\n\\n')\n    .trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 560,
+        "completionTokens": 247,
+        "completionTokensWithoutThoughts": 247,
+        "totalTokens": 807,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 19695,
+      "id": "8e6c682b-6dad-4ff2-9864-097524f7c81a",
+      "createdAt": "2025-07-20T06:55:29.873Z",
+      "notes": "correct",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 9,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "moonshotai"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(markdown: string): string {\n    return markdown\n        // Remove frontmatter\n        .replace(/^---[\\s\\S]*?---\\s*\\n?/g, '')\n        // Remove tables\n        .replace(/^\\s*\\|.*\\|\\s*$\\n?(\\s*\\|.*\\|\\s*$\\n?)+/gm, '')\n        // Remove react components\n        .replace(/<[^>\\n]*>([\\s\\S]*?)<\\/[^>\\n]*>/g, '')\n        .replace(/<[^>\\n]+\\/>/g, '')\n        // Remove import statements\n        .replace(/^import\\s+.*$/gm, '')\n        // Replace headings with plain text\n        .replace(/^(#{1,6})\\s*(.*)$/gm, '$2')\n        // Unwrap markdown links\n        .replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1')\n        // Unwrap code blocks\n        .replace(/```[\\s\\S]*?\\n|```/g, '')\n        // Clean up extra newlines\n        .replace(/\\n{3,}/g, '\\n\\n')\n        .trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 560,
+        "completionTokens": 252,
+        "completionTokensWithoutThoughts": 252,
+        "totalTokens": 812,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 19457,
+      "id": "10163ec9-5bca-4a2e-aa9d-44a4c4ebf1c0",
+      "createdAt": "2025-07-20T06:55:58.874Z",
+      "notes": "correct",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8.5,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "together"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(markdown: string): string {\n  return markdown\n\n    // 1. Remove frontmatter (lines that start with --- and end with ---)\n    .replace(/^---[\\s\\S]*?---\\n?/, '')\n\n    // 2. Remove import statements (lines starting with \"import \")\n    .replace(/^import\\s+.*?[\\r\\n]+/gm, '')\n\n    // 3. Remove react components\n    //    - Matches self-closing: <X .../>\n    //    - Matches paired: <X ...>...</X>\n    .replace(/<\\/?[A-Z][^\\s>]*(?:\\s[^>]*?)?(?:\\/?>|>.*?<\\/[A-Z][^\\s>]*>)/gs, '')\n\n    // 4. Remove tables (lines that contain | separated by just - or : and spaces)\n    .replace(/^\\|.*\\|[\\r\\n]+^\\|(?:\\s*:?-+:?\\s*\\|)+[\\r\\n]+(?:^\\|.*\\|[\\r\\n]*)*/gm, '')\n\n    // 5. Strip headings (#) but leave the text\n    .replace(/^(#{1,6})\\s+(.*)$/gm, (_, hash, text) => text)\n\n    // 6. Unwrap markdown links: [text](url) -> text\n    .replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1')\n\n    // 7. Unwrap code blocks:\n    //    - Remove ```language and closing ``` lines, keep inner content\n    .replace(/```(?:\\w+)?\\n([\\s\\S]*?)```/g, (_, code) => code);\n\n  // all rules above already trim blank lines automatically\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 569,
+        "completionTokens": 374,
+        "completionTokensWithoutThoughts": 374,
+        "totalTokens": 943,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 9149,
+      "id": "843e5216-eebc-41a6-89c5-240f12dcebfa",
+      "createdAt": "2025-07-20T07:23:51.973Z",
+      "notes": "3 newline issues",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "together"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(text: string): string {\n  return text\n    // — 1. Remove frontmatter\n    .replace(/^---\\n[\\s\\S]*?\\n---\\n?/, '')\n    // — 2. Replace headings (no # symbols at start of line)\n    .replace(/^[#\\s]+(.+)$/gm, '$1')\n    // — 3. Strip tables lines\n    .split('\\n')\n    .filter(l => !l.includes('|') || !(l.trim().startsWith('|') || l.match('|')))\n    .join('\\n')\n    // — 4. Remove import statements\n    .replace(/^\\s*import\\s+.*\\s*$/gm, '')\n    // — 5. Remove React components (<...> on their own lines)\n    .replace(/^<[\\s\\S]*?>/gm, '')\n    .replace(/^\\s*<\\/[^>]+>\\s*$/gm, '')\n    // — 6. Extract code-block contents (unwrap them)\n    .replace(/```[\\s\\S]*?\\n([\\s\\S]*?)\\n```/g, '$1')\n    // — 7. Unwrap markdown links [text](url) -> text\n    .replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1')\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 569,
+        "completionTokens": 282,
+        "completionTokensWithoutThoughts": 282,
+        "totalTokens": 851,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 7383,
+      "id": "5aecfe5f-38c4-439c-aa58-cec541f4f371",
+      "createdAt": "2025-07-20T07:24:10.446Z",
+      "notes": "no newlines",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 9,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "together"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(markdown: string): string {\n  let text = markdown;\n\n  // Remove frontmatter (--- ... --- at the start)\n  text = text.replace(/^---[\\s\\S]*?---\\s*/gm, '');\n\n  // Remove tables (| ... | with optional |--| header separators)\n  // This removes the entire table lines\n  text = text.replace(/^\\|.*\\|(?:\\r?\\n\\|[-: |]*\\|)?(?:\\r?\\n\\|.*\\|)*\\s*/gm, '');\n\n  // Remove React components (<Component ...> ... </Component>)\n  text = text.replace(/<[\\w-]+\\b[^>]*(?:>.*?<\\/[\\w-]+>|<\\/>)\\s*/gis, '');\n  text = text.replace(/<[\\w-]+\\s*\\/>\\s*/g, ''); // Handle self-closing tags on separate lines\n\n  // Remove import statements (import ... from ...)\n  text = text.replace(/^\\s*import\\s+.*?from\\s+['\"].*['\"]\\s*;?\\s*$/gm, '');\n\n  // Replace markdown links ([text](url)) with just text\n  text = text.replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1');\n\n  // Replace headings (### heading) with just heading (remove # and space)\n  text = text.replace(/^\\s*#{1,6}\\s+/gm, '');\n\n  // Unwrap code blocks (``` ... ```) - capture content without ``` and language\n  text = text.replace(/```(?:\\w+)?\\s*\\n([\\s\\S]*?)```/g, '$1');\n\n  // Clean up extra newlines (more than 2 in a row)\n  text = text.replace(/\\n{3,}/g, '\\n\\n');\n\n  return text.trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 569,
+        "completionTokens": 401,
+        "completionTokensWithoutThoughts": 401,
+        "totalTokens": 970,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 9618,
+      "id": "9a17fe27-b548-4ae5-874e-5692c3a2886d",
+      "createdAt": "2025-07-20T07:25:23.700Z",
+      "notes": "correct",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8.5,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "chutes"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(text: string): string {\n  return text\n    // Remove frontmatter\n    .replace(/^---[\\s\\S]*?---\\n*/m, '')\n    \n    // Remove import statements\n    .replace(/^\\s*import\\s+(.+)\\s+from\\s+['\"][^'\"]+['\"];?\\s*$/gm, '')\n    \n    // Replace headings with plain text (remove # symbols)\n    .replace(/^(#{1,6})\\s*(.*?)\\s*#*\\s*$/gm, '$2')\n    \n    // Unwrap markdown links: [text](url) -> text\n    .replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1')\n    \n    // Remove tables entirely\n    .replace(/^\\|.*\\|.*$/gm, '')         // table rows\n    .replace(/^\\|?[ \\-:]+\\|[ \\-:]*\\|?$/gm, '') // separator rows\n    \n    // Remove empty lines created by table removal\n    .replace(/\\n{2,}/g, '\\n\\n')\n    \n    // Remove React components\n    .replace(/<(\\/?[A-Z]\\w*|\\w+\\s[^>]*)(\\/?>)/g, '')\n    .replace(/<\\w+[^>]*>[\\s\\S]*?<\\/\\w+>/g, '')\n    \n    // Unwrap code blocks: remove ```lang only, keep content\n    .replace(/```[^\\n]*\\n?([\\s\\S]*?)```/g, '$1')\n    .trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 569,
+        "completionTokens": 335,
+        "completionTokensWithoutThoughts": 335,
+        "totalTokens": 904,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 77069,
+      "id": "f0769ca2-a3ed-4c74-b3e8-1e90bb0636f7",
+      "createdAt": "2025-07-20T08:47:49.186Z",
+      "notes": "5 newline issues",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8.5,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "chutes"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(markdown: string): string {\n  return markdown\n    // Remove frontmatter (--- ... ---)\n    .replace(/^---\\s*\\n[\\s\\S]*?\\n---\\s*\\n/g, '')\n    // Remove import statements\n    .replace(/^(import|export)\\s.*?(\\n|$)/gm, '')\n    // Remove tables\n    .replace(/^\\|.*(?:\\n\\|.*)*/gm, '')\n    // Unwrap code blocks\n    .replace(/```[\\s\\S]*?\\n([\\s\\S]*?)\\n```/g, '$1')\n    // Remove react components (jsx tags)\n    .replace(/<([A-Z][^\\s>\\/<>]*|\\/[A-Z][^\\s>\\/<>]*)([^<>]*|.*?)>/gs, '')\n    // Unwrap markdown links\n    .replace(/\\[([^\\]]+)\\]\\([^)]*\\)/g, '$1')\n    // Replace headings with plain text\n    .replace(/^#{1,6}\\s+(.*)/gm, '$1')\n    .trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 569,
+        "completionTokens": 236,
+        "completionTokensWithoutThoughts": 236,
+        "totalTokens": 805,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 59149,
+      "id": "477b5864-5149-43ef-9b2c-9a4e831ba397",
+      "createdAt": "2025-07-20T08:50:34.766Z",
+      "notes": "1 newline issue",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    },
+    {
+      "prompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "context": [
+        "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```",
+        "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+      ],
+      "model": "moonshotai/kimi-k2",
+      "provider": "openrouter",
+      "rating": 8.5,
+      "experimentId": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "promptStructure": "F",
+      "images": [],
+      "providerOptions": {
+        "only": [
+          "chutes"
+        ]
+      },
+      "response": "```typescript\nexport function cleanMarkdown(input: string): string {\n  let text = input;\n\n  // Remove frontmatter\n  text = text.replace(/^---[\\s\\S]*?---\\n?/m, '');\n\n  // Remove import statements\n  text = text.replace(/^import\\s+.*;?\\n?/gm, '');\n\n  // Unwrap code blocks and extract content\n  text = text.replace(/```[\\s\\S]*?\\n([\\s\\S]*?)\\n```\\n?/g, '$1');\n\n  // Remove single backticks (inline code)\n  text = text.replace(/`([^`]+)`/g, '$1');\n\n  // Unwrap markdown links [text](url) -> text\n  text = text.replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g, '$1');\n\n  // Replace headings with plain text\n  text = text.replace(/^\\s*#{1,6}\\s*(.*?)\\s*#*\\s*$/gm, '$1');\n\n  // Remove tables\n  text = text.replace(/^\\|.*\\|[\\r\\n]*((\\|.*\\|[\\r\\n]*)*)/gm, '');\n\n  // Remove react components\n  text = text.replace(/<(\\/?[\\w-]+)(?:\\s[^>]*?)?\\s*\\/?>/g, '');\n  text = text.replace(/<[\\w-]+.*>[\\s\\S]*?<\\/[\\w-]+>/g, '');\n\n  return text.trim();\n}\n```",
+      "reasoning": "",
+      "usage": {
+        "promptTokens": 569,
+        "completionTokens": 319,
+        "completionTokensWithoutThoughts": 319,
+        "totalTokens": 888,
+        "thoughtsTokens": 0
+      },
+      "fullPrompt": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.\n\nsample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\nexpected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```\n\ntest.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```",
+      "durationMs": 59269,
+      "id": "f6a10f6e-85ec-47ae-84b1-f10addcf0d5d",
+      "createdAt": "2025-07-20T08:55:07.339Z",
+      "notes": "5 newline issues",
+      "contextId": [
+        "9d019be3-fa77-4dd2-8164-7022680cac09",
+        "3885ca78-4046-49da-9081-0da57c04e4da",
+        "42645532-2c22-46d8-a75b-115dffd4bb76"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "id": "5b10bc3b-d55b-4b1f-8d4a-62d47495e09e",
+      "name": "Clean markdown (Kimi)",
+      "category": "coding",
+      "createdAt": "2025-07-19T07:33:58.615Z"
+    }
+  ],
+  "contexts": [
+    {
+      "id": "42645532-2c22-46d8-a75b-115dffd4bb76",
+      "name": "clean markdown test v2",
+      "type": "text",
+      "content": "test.ts\n\n```ts\nimport { cleanMarkdown } from './cleanMarkdown.ts';\nimport { readFileSync } from 'fs';\nimport * as assert from 'assert';\n\nconst inputText = readFileSync('./sample-input.md', 'utf-8');\nconst expectedOutputText = readFileSync('./expected-output.md', 'utf-8');\n\nconst cleanedText = cleanMarkdown(inputText);\n\nconst isSame = cleanedText.trim() === expectedOutputText.trim();\n\nassert.ok(isSame, 'cleanedText is not the same as expectedOutputText');\n```"
+    },
+    {
+      "id": "3885ca78-4046-49da-9081-0da57c04e4da",
+      "name": "clean markdown expected output",
+      "type": "text",
+      "content": "expected-output.md\n\n```\nAI and RL Timeline (2015-2024)\n\nThis is a paragraph with a regular link in it.\n\nconst example = \"code\";\nconsole.log(example);\n\nSome code without language\n\n2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```"
+    },
+    {
+      "id": "9d019be3-fa77-4dd2-8164-7022680cac09",
+      "name": "clean markdown sample-input",
+      "type": "text",
+      "content": "sample-input.md\n\n```md\n---\nlayout: post\ntitle: 'Test Post'\ndate: 2025-01-01\n---\n\n# AI and RL Timeline (2015-2024)\n\nThis is a paragraph with a [regular link](https://example.com) in it.\n\n| Col1 | Col2 |\n|------|------|\n| A    | B    |\n\n<CustomComponent prop=\"value\">\n  <NestedComponent />\n</CustomComponent>\n\n```javascript\nconst example = \"code\";\nconsole.log(example);\n```\n\n```\nSome code without language\n```\n\n## 2015\n\nDQN - DeepMind published their work on Deep Q-Networks (DQN) in Nature, demonstrating how reinforcement learning with deep neural networks could achieve human-level performance across 49 Atari games, learning directly from pixel inputs.\n\nAlphaGo - Google DeepMind created AlphaGo, the first computer program to defeat a professional human Go player, combining Monte Carlo tree search (MCTS) with deep neural networks trained by supervised and reinforcement learning.\n```"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "clean markdown v2",
+      "content": "Implement `cleanMarkdown` function that cleans markdown text, with the following rules:\n\n- Unwrap code blocks\n- Unwrap markdown links\n- Replace headings with plain text\n- Remove tables\n- Remove react components\n- Remove import statements\n- Remove frontmatter\n\nThe code would be placed inside `cleanMarkdown.ts`, and it would be tested by `test.ts`.\n\nJust output the content of `cleanMarkdown.ts` wrapped in markdown code block, no other text or explanation needed.",
+      "category": "coding",
+      "id": "cd870284-1743-4861-aa1f-2b42e9d06ab6",
+      "createdAt": "2025-07-17T13:17:47.328Z",
+      "hash": "08954018"
+    }
+  ]
+}
