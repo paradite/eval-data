@@ -10,6 +10,7 @@ Additional components:
 - Side-by-side visualization
   - Color by benchmark: No effect on rating
   - Color by model: -0.5 rating
-- Clear labels: +0.5 rating
+  - Alternative ways to differentiate benchmarks: +0.5 rating
+- Clear labels on bar chart: +0.5 rating
 - Poor color choice: -0.5 rating
 - Minor formatting issues: -0.5 rating
