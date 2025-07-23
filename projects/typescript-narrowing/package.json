@@ -6,7 +6,8 @@
     "compile:wrong": "tsc wrong/gemini-2.5-pro.ts --noEmit",
     "compile:gold": "tsc gold/claude-3.5-predicate.ts --noEmit",
     "compile:silver": "tsc silver/gpt-4.1.ts --noEmit",
-    "compile:all": "npm run compile:gold && npm run compile:silver && npm run compile:wrong"
+    "compile:all": "npm run compile:gold && npm run compile:silver && npm run compile:wrong",
+    "compile:pending": "tsc pending/kimi-k2-moonshot-ai.ts --noEmit"
   },
   "author": "",
   "description": "",
