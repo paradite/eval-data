@@ -21,6 +21,9 @@ import { cleanMarkdown as cleanMarkdownKimiK2Together3 } from './model-responses
 import { cleanMarkdown as cleanMarkdownKimiK2Chutes1 } from './model-responses/kimi-k2-chutes-1.ts';
 import { cleanMarkdown as cleanMarkdownKimiK2Chutes2 } from './model-responses/kimi-k2-chutes-2.ts';
 import { cleanMarkdown as cleanMarkdownKimiK2Chutes3 } from './model-responses/kimi-k2-chutes-3.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2MoonshotAiApi1 } from './model-responses/kimi-k2-moonshot-ai-api-1.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2MoonshotAiApi2 } from './model-responses/kimi-k2-moonshot-ai-api-2.ts';
+import { cleanMarkdown as cleanMarkdownKimiK2MoonshotAiApi3 } from './model-responses/kimi-k2-moonshot-ai-api-3.ts';
 
 import { readFileSync, writeFileSync } from 'fs';
 import { diffChars } from 'diff';
@@ -169,6 +172,21 @@ const models: ModelConfig[] = [
     name: 'Kimi K2 Chutes 3',
     cleanFunction: cleanMarkdownKimiK2Chutes3,
     outputPath: './model-responses/kimi-k2-chutes-3.md',
+  },
+  {
+    name: 'Kimi K2 Moonshot AI API 1',
+    cleanFunction: cleanMarkdownKimiK2MoonshotAiApi1,
+    outputPath: './model-responses/kimi-k2-moonshot-ai-api-1.md',
+  },
+  {
+    name: 'Kimi K2 Moonshot AI API 2',
+    cleanFunction: cleanMarkdownKimiK2MoonshotAiApi2,
+    outputPath: './model-responses/kimi-k2-moonshot-ai-api-2.md',
+  },
+  {
+    name: 'Kimi K2 Moonshot AI API 3',
+    cleanFunction: cleanMarkdownKimiK2MoonshotAiApi3,
+    outputPath: './model-responses/kimi-k2-moonshot-ai-api-3.md',
   },
 ];
 
