@@ -6,5 +6,5 @@ Criteria:
 - The output does not contain newlines: 8/10
 
 Additional components:
-- Short code: +0.25 rating
+- Short code (1000 characters or less) that is correct: +0.25 rating
 - Verbose output: -0.5 rating
