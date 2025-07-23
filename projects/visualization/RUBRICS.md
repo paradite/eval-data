@@ -1,12 +1,15 @@
 # Rubrics for model benchmark visualization project
 
 Criteria:
+- Side-by-side visualization without label: 8.5/10
 - Baseline visualization without label: 8/10
 - Has major formatting issues: 5/10
 - Did not run / Code error: 1/10
 
 Additional components:
-- Side-by-side comparison: +0.5 rating
+- Side-by-side visualization
+  - Color by benchmark: No effect on rating
+  - Color by model: -0.5 rating
 - Clear labels: +0.5 rating
-- Poor cholor choice: -0.5 rating
+- Poor color choice: -0.5 rating
 - Minor formatting issues: -0.5 rating
