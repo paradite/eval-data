@@ -3,6 +3,7 @@
 Criteria:
 - Side-by-side visualization without label: 8.5/10
 - Baseline visualization without label: 8/10
+- Horizontal bar chart (if cannot fit in the page): 7.5/10
 - Has major formatting issues: 5/10
 - Did not run / Code error: 1/10
 
