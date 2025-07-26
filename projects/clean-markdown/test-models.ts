@@ -24,6 +24,9 @@ import { cleanMarkdown as cleanMarkdownKimiK2Chutes3 } from './model-responses/k
 import { cleanMarkdown as cleanMarkdownKimiK2MoonshotAiApi1 } from './model-responses/kimi-k2-moonshot-ai-api-1.ts';
 import { cleanMarkdown as cleanMarkdownKimiK2MoonshotAiApi2 } from './model-responses/kimi-k2-moonshot-ai-api-2.ts';
 import { cleanMarkdown as cleanMarkdownKimiK2MoonshotAiApi3 } from './model-responses/kimi-k2-moonshot-ai-api-3.ts';
+import { cleanMarkdown as cleanMarkdownQwen3CoderOrAlibabaPlus1 } from './model-responses/qwen3-coder-or-alibaba-plus-1.ts';
+import { cleanMarkdown as cleanMarkdownQwen3CoderOrAlibabaPlus2 } from './model-responses/qwen3-coder-or-alibaba-plus-2.ts';
+import { cleanMarkdown as cleanMarkdownQwen3CoderOrAlibabaPlus3 } from './model-responses/qwen3-coder-or-alibaba-plus-3.ts';
 
 import { readFileSync, writeFileSync } from 'fs';
 import { diffChars } from 'diff';
@@ -187,6 +190,21 @@ const models: ModelConfig[] = [
     name: 'Kimi K2 Moonshot AI API 3',
     cleanFunction: cleanMarkdownKimiK2MoonshotAiApi3,
     outputPath: './model-responses/kimi-k2-moonshot-ai-api-3.md',
+  },
+  {
+    name: 'Qwen3 Coder or Alibaba Plus 1',
+    cleanFunction: cleanMarkdownQwen3CoderOrAlibabaPlus1,
+    outputPath: './model-responses/qwen3-coder-or-alibaba-plus-1.md',
+  },
+  {
+    name: 'Qwen3 Coder or Alibaba Plus 2',
+    cleanFunction: cleanMarkdownQwen3CoderOrAlibabaPlus2,
+    outputPath: './model-responses/qwen3-coder-or-alibaba-plus-2.md',
+  },
+  {
+    name: 'Qwen3 Coder or Alibaba Plus 3',
+    cleanFunction: cleanMarkdownQwen3CoderOrAlibabaPlus3,
+    outputPath: './model-responses/qwen3-coder-or-alibaba-plus-3.md',
   },
 ];
 
