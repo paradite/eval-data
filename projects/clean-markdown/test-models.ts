@@ -27,6 +27,11 @@ import { cleanMarkdown as cleanMarkdownKimiK2MoonshotAiApi3 } from './model-resp
 import { cleanMarkdown as cleanMarkdownQwen3CoderOrAlibabaPlus1 } from './model-responses/qwen3-coder-or-alibaba-plus-1.ts';
 import { cleanMarkdown as cleanMarkdownQwen3CoderOrAlibabaPlus2 } from './model-responses/qwen3-coder-or-alibaba-plus-2.ts';
 import { cleanMarkdown as cleanMarkdownQwen3CoderOrAlibabaPlus3 } from './model-responses/qwen3-coder-or-alibaba-plus-3.ts';
+import { cleanMarkdown as cleanMarkdownHorizonAlpha1 } from './model-responses/horizon-alpha-1.ts';
+import { cleanMarkdown as cleanMarkdownHorizonAlpha2 } from './model-responses/horizon-alpha-2.ts';
+import { cleanMarkdown as cleanMarkdownHorizonAlpha3 } from './model-responses/horizon-alpha-3.ts';
+import { cleanMarkdown as cleanMarkdownHorizonAlpha4 } from './model-responses/horizon-alpha-4.ts';
+import { cleanMarkdown as cleanMarkdownHorizonAlpha5 } from './model-responses/horizon-alpha-5.ts';
 
 import { readFileSync, writeFileSync } from 'fs';
 import { diffChars } from 'diff';
@@ -205,6 +210,31 @@ const models: ModelConfig[] = [
     name: 'Qwen3 Coder or Alibaba Plus 3',
     cleanFunction: cleanMarkdownQwen3CoderOrAlibabaPlus3,
     outputPath: './model-responses/qwen3-coder-or-alibaba-plus-3.md',
+  },
+  {
+    name: 'Horizon Alpha 1',
+    cleanFunction: cleanMarkdownHorizonAlpha1,
+    outputPath: './model-responses/horizon-alpha-1.md',
+  },
+  {
+    name: 'Horizon Alpha 2',
+    cleanFunction: cleanMarkdownHorizonAlpha2,
+    outputPath: './model-responses/horizon-alpha-2.md',
+  },
+  {
+    name: 'Horizon Alpha 3',
+    cleanFunction: cleanMarkdownHorizonAlpha3,
+    outputPath: './model-responses/horizon-alpha-3.md',
+  },
+  {
+    name: 'Horizon Alpha 4',
+    cleanFunction: cleanMarkdownHorizonAlpha4,
+    outputPath: './model-responses/horizon-alpha-4.md',
+  },
+  {
+    name: 'Horizon Alpha 5',
+    cleanFunction: cleanMarkdownHorizonAlpha5,
+    outputPath: './model-responses/horizon-alpha-5.md',
   },
 ];
 
