@@ -7,7 +7,7 @@
     "compile:gold": "tsc gold/claude-3.5-predicate.ts --noEmit",
     "compile:silver": "tsc silver/gpt-4.1.ts --noEmit",
     "compile:all": "npm run compile:gold && npm run compile:silver && npm run compile:wrong",
-    "compile:pending": "tsc pending/gpt-oss-120b-cerebras-2.ts --noEmit"
+    "compile:pending": "tsc pending/qwen3-coder-2-3.ts --noEmit"
   },
   "author": "",
   "description": "",
