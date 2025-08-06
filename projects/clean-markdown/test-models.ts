@@ -32,6 +32,9 @@ import { cleanMarkdown as cleanMarkdownHorizonAlpha2 } from './model-responses/h
 import { cleanMarkdown as cleanMarkdownHorizonAlpha3 } from './model-responses/horizon-alpha-3.ts';
 import { cleanMarkdown as cleanMarkdownHorizonAlpha4 } from './model-responses/horizon-alpha-4.ts';
 import { cleanMarkdown as cleanMarkdownHorizonAlpha5 } from './model-responses/horizon-alpha-5.ts';
+import { cleanMarkdown as cleanMarkdownGptOss120bCerebras1 } from './model-responses/gpt-oss-120b-cerebras-1.ts';
+import { cleanMarkdown as cleanMarkdownGptOss120bCerebras2 } from './model-responses/gpt-oss-120b-cerebras-2.ts';
+import { cleanMarkdown as cleanMarkdownGptOss120bCerebras3 } from './model-responses/gpt-oss-120b-cerebras-3.ts';
 
 import { readFileSync, writeFileSync } from 'fs';
 import { diffChars } from 'diff';
@@ -235,6 +238,21 @@ const models: ModelConfig[] = [
     name: 'Horizon Alpha 5',
     cleanFunction: cleanMarkdownHorizonAlpha5,
     outputPath: './model-responses/horizon-alpha-5.md',
+  },
+  {
+    name: 'GPT-OSS 120B Cerebras 1',
+    cleanFunction: cleanMarkdownGptOss120bCerebras1,
+    outputPath: './model-responses/gpt-oss-120b-cerebras-1.md',
+  },
+  {
+    name: 'GPT-OSS 120B Cerebras 2',
+    cleanFunction: cleanMarkdownGptOss120bCerebras2,
+    outputPath: './model-responses/gpt-oss-120b-cerebras-2.md',
+  },
+  {   
+    name: 'GPT-OSS 120B Cerebras 3',
+    cleanFunction: cleanMarkdownGptOss120bCerebras3,
+    outputPath: './model-responses/gpt-oss-120b-cerebras-3.md',
   },
 ];
 
