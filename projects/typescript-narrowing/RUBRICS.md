@@ -11,3 +11,6 @@ Additional components:
   - Includes one wrong method: -0.5 rating
   - Final answer wrong: -1 rating
 - Verbose output: -0.5 rating
+
+Additional instructions for variance:
+- Each model is given two tries for this task to account for large variance in output. The higher rating will be used.
