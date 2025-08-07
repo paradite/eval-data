@@ -9,9 +9,13 @@ Criteria:
 
 Additional components:
 - Side-by-side visualization
-  - Color by benchmark: No effect on rating
-  - Color by model: -0.5 rating
+  - Color by benchmark: +0.5 rating
   - Alternative ways to differentiate benchmarks: +0.5 rating
+  - Color by model: No effect on rating
 - Clear labels on bar chart: +0.5 rating
+- Visually pleasing: +0.25 rating
 - Poor color choice: -0.5 rating
 - Minor formatting issues: -0.5 rating
+
+Additional instructions for variance:
+- If the code did not run or render in the first try, a second try is given to regenerate the code.
