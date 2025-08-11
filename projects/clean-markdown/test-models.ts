@@ -6,6 +6,8 @@ import { diffChars } from 'diff';
 const inputText = readFileSync('./sample-input.md', 'utf-8');
 const expectedOutputText = readFileSync('./expected-output.md', 'utf-8');
 
+const isVerbose = process.argv.includes('--verbose') || process.argv.includes('-v');
+
 interface ModelConfig {
   name: string;
   cleanFunction: (text: string) => string;
@@ -63,25 +65,50 @@ function testModel(config: ModelConfig, inputText: string, expectedOutputText: s
   
   if (config.outputPath) {
     writeFileSync(config.outputPath, cleanedText);
+    if (isVerbose) {
+      console.log(`Written output to: ${config.outputPath}`);
+    }
   }
   
   const isSame = cleanedText.trim() === expectedOutputText.trim();
-  console.log(config.name, isSame);
   
-  if (!isSame) {
+  if (isSame) {
+    console.log(`${config.name}: 100% match`);
+  } else {
     const diff = diffChars(expectedOutputText.trim(), cleanedText.trim()).filter(
       (d) => d.added || d.removed
     );
-    console.log('number of diff', diff.length);
-    for (const d of diff) {
-      console.log(d);
+    console.log(`${config.name}: not match (${diff.length} diffs)`);
+    
+    if (isVerbose) {
+      console.log('  Diff details:');
+      for (const d of diff) {
+        const type = d.added ? 'added' : d.removed ? 'removed' : 'unchanged';
+        const preview = d.value.length > 50 ? d.value.substring(0, 50) + '...' : d.value;
+        const displayValue = preview.replace(/\n/g, '\\n').replace(/\t/g, '\\t');
+        console.log(`    ${type}: "${displayValue}"`);
+      }
     }
   }
 }
 
 async function main() {
   try {
+    if (isVerbose) {
+      console.log('Running in verbose mode...');
+      console.log(`Input text length: ${inputText.length}`);
+      console.log(`Expected output length: ${expectedOutputText.length}`);
+      console.log('');
+    }
+    
     const models = await loadModelsFromDirectory();
+    
+    if (isVerbose) {
+      console.log(`Found ${models.length} models to test:`);
+      models.forEach(model => console.log(`  - ${model.name}`));
+      console.log('');
+    }
+    
     models.forEach(model => testModel(model, inputText, expectedOutputText));
   } catch (error) {
     console.error('Failed to load models:', error);
