@@ -8,7 +8,7 @@ DQN (Deep Q-Network) - Google DeepMind published the seminal paper introducing D
 
 ResNet - Microsoft Research introduced Residual Networks (ResNet), solving the vanishing gradient problem in very deep neural networks through skip connections, enabling training of networks with hundreds of layers and achieving breakthrough performance on ImageNet.
 
-const example = "code";
+const example = 'code';
 console.log(example);
 
 2016
