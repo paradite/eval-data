@@ -1,7 +1,7 @@
 # Rubrics for Clean MDX Project
 
 Criteria:
-- Code runs and gives correct (expected) output: 9/10
+- No text content was removed: 9/10
 - Some text content was removed: 8/10
 
 Additional components:
