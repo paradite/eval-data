@@ -11,3 +11,6 @@ Additional components:
 - Text content removed: -0.5 rating
 - Short code (1000 characters or less) that is correct: +0.25 rating
 - Verbose output: -0.5 rating
+
+Additional instructions for variance:
+- Each model is given two tries for this task. The higher rating will be used.

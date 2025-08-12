@@ -13,4 +13,4 @@ Additional components:
 - Verbose output: -0.5 rating
 
 Additional instructions for variance:
-- Each model is given two tries for this task to account for large variance in output. The higher rating will be used.
+- Each model is given two tries for this task. The higher rating will be used.
