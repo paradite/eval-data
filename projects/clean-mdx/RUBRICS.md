@@ -5,7 +5,8 @@ Criteria:
 - Some text content was removed: 8/10
 
 Additional components:
-- MDX elements:
+- Left-over elements:
+  - Left-over tables: -0.5 rating
   - Left-over mdx import statements: -0.5 rating
   - Left-over mdx components: -0.5 rating
 - Newline handling:
