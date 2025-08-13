@@ -30,6 +30,10 @@ Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.
 
 [clean-markdown](/projects/clean-markdown/) - Clean markdown into plain text.
 
+### Clean MDX
+
+[clean-mdx](/projects/clean-mdx/) - Clean MDX into plain text.
+
 ## Writing Projects
 
 ### AI Timeline
