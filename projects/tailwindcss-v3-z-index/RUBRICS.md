@@ -7,4 +7,4 @@ Criteria:
 
 Additional components:
 - Good explanation of the root cause: +0.25 rating
-- Removes unnecessary z-index values: +0.25 rating
+- Removes extra z-index values: +0.25 rating
