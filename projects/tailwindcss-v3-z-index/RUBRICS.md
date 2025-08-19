@@ -8,3 +8,6 @@ Criteria:
 Additional components:
 - Good explanation of the bug: +0.25 rating
 - Removes extra z-index values: +0.25 rating
+
+Additional instructions for variance:
+- Each model is given two tries for this task. The higher rating will be used.
