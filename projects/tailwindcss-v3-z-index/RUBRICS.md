@@ -6,7 +6,6 @@ Criteria:
 - Bug not identified: 1/10
 
 Additional components:
-- Good explanation of the bug: +0.25 rating
 - Removes extra z-index values: +0.25 rating
 
 Additional instructions for variance:

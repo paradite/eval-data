@@ -1,0 +1,15 @@
+{
+  "name": "tailwindcss-v3-z-index-test",
+  "version": "1.0.0",
+  "description": "Test suite for TailwindCSS v3 z-index bug fixes",
+  "main": "test-models.ts",
+  "scripts": {
+    "test": "npx tsx test-models.ts",
+    "test:verbose": "npx tsx test-models.ts --verbose"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0"
+  }
+}
