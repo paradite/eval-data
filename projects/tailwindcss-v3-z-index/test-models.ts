@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync, statSync } from 'fs';
 import { join, basename } from 'path';
+import { createHash } from 'crypto';
 
 const originalHTML = readFileSync('./index.html', 'utf-8');
 
@@ -10,6 +11,7 @@ interface ModelConfig {
   htmlContent: string;
   filePath: string;
   createdTime: Date;
+  hash: string;
 }
 
 function formatModelName(filename: string): string {
@@ -33,12 +35,14 @@ function loadModelsFromDirectory(): ModelConfig[] {
       const stats = statSync(filePath);
       const htmlContent = readFileSync(filePath, 'utf-8');
       const filename = basename(file, '.html');
+      const hash = createHash('md5').update(htmlContent).digest('hex');
       
       models.push({
         name: formatModelName(filename),
         htmlContent,
         filePath,
         createdTime: stats.birthtime,
+        hash,
       });
     } catch (error) {
       console.warn(`Failed to load model from ${file}:`, error);
@@ -119,7 +123,7 @@ function calculateScore(config: ModelConfig): {
 function testModel(config: ModelConfig): void {
   const result = calculateScore(config);
   
-  console.log(`${config.name}: ${result.score.toFixed(2)}/10`);
+  console.log(`${config.name}: ${result.score.toFixed(2)}/10 (hash: ${config.hash.substring(0, 8)})`);
   
   if (isVerbose) {
     console.log('  Breakdown:');
@@ -130,6 +134,7 @@ function testModel(config: ModelConfig): void {
       console.log('  Issues found:');
       zIndexAnalysis.details.forEach(detail => console.log(`    - ${detail}`));
     }
+    console.log(`  Full hash: ${config.hash}`);
     console.log('');
   }
 }
