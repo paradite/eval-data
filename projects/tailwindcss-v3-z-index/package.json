@@ -7,9 +7,9 @@
     "test": "npx tsx test-models.ts",
     "test:verbose": "npx tsx test-models.ts --verbose"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "tsx": "^4.0.0"
+    "tsx": "^4.0.0",
+    "typescript": "^5.9.2"
   }
 }

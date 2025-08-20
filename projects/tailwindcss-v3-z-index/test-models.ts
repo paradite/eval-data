@@ -55,6 +55,7 @@ function loadModelsFromDirectory(): ModelConfig[] {
 function checkZIndexFixes(htmlContent: string): {
   fixedInvalidZIndex: boolean;
   removedExtraZIndex: boolean;
+  usedCustomZIndex: boolean;
   details: string[];
 } {
   const details: string[] = [];
@@ -67,6 +68,11 @@ function checkZIndexFixes(htmlContent: string): {
   if (!fixedInvalidZIndex) {
     details.push(`Found invalid z-index classes: ${invalidMatches?.join(', ')}`);
   }
+  
+  // Check for custom z-index values like z-[60], z-[70], etc.
+  const customZIndexPattern = /z-\[(?:60|70|80|90|[1-9][0-9]{2,})\]/g;
+  const customMatches = htmlContent.match(customZIndexPattern);
+  const usedCustomZIndex = !!(customMatches && customMatches.length > 0);
   
   // Check for unnecessary z-index classes (like on Save Settings button)
   const saveButtonPattern = /<button[^>]*class="[^"]*bg-green-500[^"]*"[^>]*>/;
@@ -81,6 +87,7 @@ function checkZIndexFixes(htmlContent: string): {
   return {
     fixedInvalidZIndex,
     removedExtraZIndex,
+    usedCustomZIndex,
     details
   };
 }
@@ -116,6 +123,10 @@ function calculateScore(config: ModelConfig): {
     breakdown.push('✓ Removed extra z-index values');
   }
   
+  if (zIndexAnalysis.usedCustomZIndex) {
+    score += 0.25;
+    breakdown.push('✓ Uses correct custom values syntax (e.g., z-[60])');
+  }
   
   return { score: Math.min(score, 10), breakdown };
 }
@@ -126,12 +137,10 @@ function testModel(config: ModelConfig): void {
   console.log(`${config.name} (${config.hash.substring(0, 8)}): ${result.score.toFixed(2)}/10`);
   
   if (isVerbose) {
-    console.log('  Breakdown:');
     result.breakdown.forEach(item => console.log(`    ${item}`));
     
     const zIndexAnalysis = checkZIndexFixes(config.htmlContent);
     if (zIndexAnalysis.details.length > 0) {
-      console.log('  Issues found:');
       zIndexAnalysis.details.forEach(detail => console.log(`    - ${detail}`));
     }
   }
