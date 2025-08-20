@@ -123,7 +123,7 @@ function calculateScore(config: ModelConfig): {
 function testModel(config: ModelConfig): void {
   const result = calculateScore(config);
   
-  console.log(`${config.name}: ${result.score.toFixed(2)}/10 (hash: ${config.hash.substring(0, 8)})`);
+  console.log(`${config.name} (${config.hash.substring(0, 8)}): ${result.score.toFixed(2)}/10`);
   
   if (isVerbose) {
     console.log('  Breakdown:');
@@ -134,8 +134,6 @@ function testModel(config: ModelConfig): void {
       console.log('  Issues found:');
       zIndexAnalysis.details.forEach(detail => console.log(`    - ${detail}`));
     }
-    console.log(`  Full hash: ${config.hash}`);
-    console.log('');
   }
 }
 
