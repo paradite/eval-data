@@ -1,0 +1,26 @@
+<!-- … -->
+<script>
+  const modal = document.getElementById('modal');
+  const dialog = modal.querySelector('.bg-white'); // the white box
+  const openModalBtn = document.getElementById('openModal');
+  const closeModalBtn = document.getElementById('closeModal');
+
+  openModalBtn.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  });
+
+  const closeModal = () => {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  };
+
+  closeModalBtn.addEventListener('click', closeModal);
+
+  // close only when the click is on the backdrop, not on the dialog
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+</script>

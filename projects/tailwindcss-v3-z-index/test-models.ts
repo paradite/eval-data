@@ -100,13 +100,19 @@ function checkZIndexFixes(htmlContent: string): {
   removedExtraZIndex: boolean;
   usedCustomZIndex: boolean;
   details: string[];
+  modalMatch: boolean;
 } {
   const details: string[] = [];
   
   // Check for invalid z-index classes (z-60, z-70, etc.)
   const invalidZIndexPattern = /z-(?:60|70|80|90|[1-9][0-9]{2,})/g;
   const invalidMatches = htmlContent.match(invalidZIndexPattern);
-  const fixedInvalidZIndex = !invalidMatches || invalidMatches.length === 0;
+
+  // Check for HTML element presence
+  const modalPattern = /<div[^>]*id="modal"[^>]*>/;
+  const modalMatch = htmlContent.match(modalPattern)?.length === 1;
+
+  const fixedInvalidZIndex = (!invalidMatches || invalidMatches.length === 0) && modalMatch;
   
   if (!fixedInvalidZIndex) {
     details.push(`Found invalid z-index classes: ${invalidMatches?.join(', ')}`);
@@ -140,7 +146,8 @@ function checkZIndexFixes(htmlContent: string): {
     fixedInvalidZIndex,
     removedExtraZIndex,
     usedCustomZIndex,
-    details
+    details,
+    modalMatch
   };
 }
 
@@ -158,6 +165,13 @@ function calculateScore(config: ModelConfig): {
     score = 9; // Bug identified and fixed
     breakdown.push('✓ Fixed invalid z-index classes');
   } else {
+    // Check if modal is present
+    if (!zIndexAnalysis.modalMatch) {
+      score = 1; // Bug not identified
+      breakdown.push('✗ Did not fix invalid z-index classes');
+      return { score, breakdown };
+    }
+
     // Check if they at least identified some z-index issues
     const originalAnalysis = checkZIndexFixes(originalHTML);
     if (zIndexAnalysis.details.length < originalAnalysis.details.length) {
