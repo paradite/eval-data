@@ -34,6 +34,10 @@ Built by [16x Prompt](https://prompt.16x.engineer/) and [16x Eval](https://eval.
 
 [clean-mdx](/projects/clean-mdx/) - Clean MDX into plain text.
 
+### Tailwind CSS Z-Index
+
+[tailwindcss-v3-z-index](/projects/tailwindcss-v3-z-index/) - Fix invalid z-index classes in Tailwind CSS v3.
+
 ## Writing Projects
 
 ### AI Timeline
