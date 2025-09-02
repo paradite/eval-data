@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-strip-types test-models.ts"
+    "test": "node --experimental-strip-types test-models.ts",
+    "test:verbose": "node --experimental-strip-types test-models.ts --verbose"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
