@@ -8,3 +8,4 @@ Criteria:
 Additional components:
 - Short code (1000 characters or less) that is correct: +0.25 rating
 - Verbose output: -0.5 rating
+- Missing export statement: -0.5 rating
