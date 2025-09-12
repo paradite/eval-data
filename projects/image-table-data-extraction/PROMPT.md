@@ -12,3 +12,6 @@ Sample response format:
 - gpt-oss-120b-high [chutes]: 47.2, 44.4, -
 - gpt-4.1: 55.6, 58.3, 56.3
 ```
+
+Additional instructions for variance:
+- If a model did not achieve the 9.5 score in the first try, it is given a second try.
