@@ -6,3 +6,6 @@ Criteria:
 - 2 models are correctly extracted: 6/10
 - 1 model is correctly extracted: 3/10
 - 0 models are correctly extracted: 1/10
+
+Additional instructions for variance:
+- Each model is given two tries for this task. The higher rating will be used.
