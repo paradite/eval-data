@@ -1,8 +1,9 @@
 Extract the Fiction.LiveBench performance data from the table in the image and return it in a structured format.
 
-Extract the data from following models for 8k, 32k and 192k:
+Extract the data from following 4 models for 8k, 32k and 192k:
 - gpt-5
 - deepseek-chat-v3.1 [reasoning: high] [deepseek]
+- claude-sonnet-4:thinking
 - claude-sonnet-4
 
 Sample response format:
